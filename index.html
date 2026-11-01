@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-scale="1" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#1B5741">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="A gentle daily exercise plan">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>My Exercise Plan</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#F6F3EC; --card:#FFFFFF; --ink:#141414; --muted:#424242; --line:#C9C1B3; --line-soft:#E6E0D5;
+  --pri:#1B5741; --pri-2:#123D2D; --pri-soft:#E2EFE8;
+  --done:#1B6A38; --done-soft:#DCEFE1;
+  --amber:#6E4600; --amber-soft:#FFF0CF; --amber-line:#C98F1E;
+  --red:#9A1A1A; --red-soft:#FCE8E6; --red-line:#C9403A;
+  --focus:#0B57D0;
+}
+html{font-size:19px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html[data-scale="1"]{font-size:22.5px}
+html[data-scale="2"]{font-size:26px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.5;padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:-9999px;top:0;background:#fff;color:var(--ink);padding:.75rem 1rem;z-index:100;font-weight:700}
+.skip-link:focus{left:.5rem;top:.5rem}
+:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+h1:focus,main:focus{outline:none}
+[hidden]{display:none!important}
+.no-js .bottomnav,.no-js .textsize{display:none!important}
+a{color:var(--pri);text-underline-offset:3px}
+p{margin:.5rem 0}
+h1{font-size:1.6rem;line-height:1.2;margin:.4rem 0 .6rem}
+h2{font-size:1.25rem;line-height:1.25;margin:0 0 .5rem}
+h3{font-size:1.05rem;line-height:1.3;margin:1rem 0 .25rem}
+svg{display:block}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top));background:var(--pri);color:#fff}
+.brand{font-weight:800;font-size:19px;letter-spacing:.01em}
+.textsize{display:flex;gap:8px}
+.ts-btn{min-width:52px;min-height:48px;border:2px solid #fff;border-radius:12px;background:transparent;color:#fff;font:inherit;font-size:19px;font-weight:800;cursor:pointer}
+.ts-btn:disabled{opacity:.45;cursor:not-allowed}
+.ts-btn:focus-visible{outline-color:#fff}
+
+main{display:block;max-width:42rem;margin:0 auto;padding:1rem .75rem 1.5rem}
+
+/* cards & buttons */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1rem;margin:0 0 1rem}
+.btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;min-height:3rem;padding:.65rem 1rem;margin:.5rem 0;border-radius:12px;border:2px solid var(--pri);background:var(--pri);color:#fff;font:inherit;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;line-height:1.25}
+.btn-secondary{background:#fff;color:var(--pri)}
+.btn-danger{background:#fff;color:var(--red);border-color:var(--red)}
+.btn-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr));gap:.6rem;margin:.5rem 0}
+.btn-row .btn{margin:0}
+button:disabled{opacity:.5;cursor:not-allowed}
+.small-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:48px;padding:.4rem .85rem;margin:.35rem .35rem .2rem 0;border:2px solid var(--pri);border-radius:10px;background:#fff;color:var(--pri);font:inherit;font-size:.95rem;font-weight:700;cursor:pointer;line-height:1.2}
+.small-btn svg{width:1.25em;height:1.25em;flex:none}
+.small-btn[aria-pressed="true"]{background:var(--pri);color:#fff}
+.back-link{display:inline-flex;align-items:center;min-height:48px;font-weight:700}
+.muted{color:var(--muted);font-weight:400}
+.tag{display:inline-block;padding:.05rem .6rem;border-radius:999px;border:2px solid currentColor;font-size:.8rem;font-weight:800;line-height:1.5;margin:.15rem .3rem .15rem 0;vertical-align:middle}
+.tag-today{color:var(--pri)}
+.tag-opt{color:#3d3d3d}
+.tag-good{color:var(--amber)}
+.tag-skip{color:var(--red)}
+.day-sub{color:var(--muted);margin-top:0}
+.day-sub strong{color:var(--ink)}
+
+/* notices */
+.notice{border-radius:14px;padding:.85rem 1rem;margin:0 0 1rem;border:2px solid}
+.notice h2,.notice h3{margin-top:0}
+.notice p:first-child{margin-top:0}
+.notice p:last-child{margin-bottom:0}
+.n-info{background:var(--pri-soft);border-color:var(--pri)}
+.n-amber{background:var(--amber-soft);border-color:var(--amber-line)}
+.n-red{background:var(--red-soft);border-color:var(--red-line)}
+.safety-strip a{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;border:2px solid var(--red-line);background:var(--red-soft);color:var(--red);border-radius:14px;text-decoration:none;font-weight:600;min-height:3rem}
+.safety-strip svg{width:1.6em;height:1.6em;flex:none}
+
+/* today card */
+.today-list{list-style:none;padding:0;margin:.5rem 0}
+.today-list li{display:flex;align-items:center;gap:.6rem;padding:.4rem 0;border-top:1px solid var(--line-soft)}
+.tl-mark{width:1.6rem;height:1.6rem;border:2.5px solid var(--line);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;flex:none;color:#fff}
+.today-list li.is-done .tl-mark{background:var(--done);border-color:var(--done)}
+.tl-mark svg{width:1.1rem;height:1.1rem}
+
+/* calendar */
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem}
+.cal-head h2{margin:0;text-align:center;flex:1;font-size:1.2rem}
+.cal-nav{min-width:52px;min-height:52px;border:2px solid var(--pri);border-radius:12px;background:#fff;color:var(--pri);font:inherit;font-size:1.5rem;font-weight:800;line-height:1;cursor:pointer}
+.cal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cal-dow{text-align:center;font-weight:800;color:var(--muted);font-size:min(.85rem,18px);padding:.2rem 0}
+.cal-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;min-height:max(3.1rem,58px);padding:.35rem 0 .25rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:min(1.05rem,24px);font-weight:700;line-height:1.1;cursor:pointer}
+.cal-day .mk{width:min(1.05rem,22px);height:min(1.05rem,22px)}
+.cal-day .mk svg{width:100%;height:100%}
+.cal-day.before{background:transparent;color:#5c5c5c;border-style:dashed;font-weight:500}
+.cal-day.done{background:var(--done-soft);border-color:var(--done)}
+.cal-day.done .mk{color:var(--done)}
+.cal-day.partial .mk{color:var(--amber)}
+.cal-day.rest .mk{color:#555}
+.cal-day.strength .mk{color:var(--pri)}
+.cal-day.today{border:3.5px solid var(--ink);background-color:#FFF8D6}
+.cal-day.today.done{background-color:var(--done-soft)}
+.cal-empty{min-height:max(3.1rem,58px)}
+.legend{list-style:none;padding:0;margin:.9rem 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr));gap:.35rem .75rem;font-size:.9rem}
+.legend li{display:flex;align-items:center;gap:.5rem}
+.lg{width:1.6rem;height:1.6rem;border-radius:7px;border:1.5px solid var(--line);display:inline-flex;align-items:center;justify-content:center;background:#fff;flex:none}
+.lg svg{width:1rem;height:1rem}
+.lg-done{background:var(--done-soft);border-color:var(--done);color:var(--done)}
+.lg-partial{color:var(--amber)}
+.lg-strength{color:var(--pri)}
+.lg-rest{color:#555}
+.lg-today{border:3.5px solid var(--ink);background:#FFF8D6}
+
+/* day blocks */
+.block{border-left:9px solid var(--pri)}
+.k-wake{border-left-color:#2B5C8A}
+.k-strength{border-left-color:#1B5741}
+.k-ease{border-left-color:#6A4A9A}
+.k-pedal{border-left-color:#0E6672}
+.k-standing{border-left-color:#9A5B00}
+.k-walk{border-left-color:#7A4B2A}
+.block.is-skip{background:#F3F1EC}
+.block h2 .sub{font-weight:600;color:var(--muted);font-size:.9em}
+.meta{color:var(--ink);margin:.4rem 0}
+.note{background:#F4F2EE;border-radius:8px;padding:.5rem .75rem}
+.ex-list{list-style:none;margin:0;padding:0}
+.ex{padding:.65rem 0 .35rem;border-top:1px solid var(--line-soft)}
+.ex-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.25rem .75rem;align-items:baseline}
+.ex-name{font-weight:800}
+.ex-dose{font-weight:700;color:var(--pri-2);background:var(--pri-soft);padding:.05rem .55rem;border-radius:8px}
+details summary{cursor:pointer;color:var(--pri);font-weight:700;min-height:48px;display:flex;align-items:center;gap:.45rem;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"";width:0;height:0;border-left:.45em solid currentColor;border-top:.3em solid transparent;border-bottom:.3em solid transparent;flex:none}
+details[open] summary::before{border-left:.3em solid transparent;border-right:.3em solid transparent;border-top:.45em solid currentColor;border-bottom:0}
+.steps{margin:.15rem 0 .5rem;padding-left:1.5rem}
+.steps li{margin:.35rem 0}
+.tip{background:#EEF5F1;border-left:5px solid var(--pri);padding:.5rem .75rem;border-radius:6px;margin:.35rem 0}
+.done-btn{width:100%;min-height:3.5rem;margin-top:.8rem;border:3px solid var(--done);background:#fff;color:var(--done);border-radius:14px;font:inherit;font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;gap:.65rem;cursor:pointer;line-height:1.2;padding:.5rem}
+.done-btn .box{width:1.5rem;height:1.5rem;border:3px solid currentColor;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.done-btn .box svg{width:1.1rem;height:1.1rem}
+.done-btn[aria-pressed="true"]{background:var(--done);color:#fff}
+
+/* choices */
+.choice-label{margin:.9rem 0 .5rem}
+.card > .choice-group:first-child .choice-label{margin-top:0}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,6.2rem),1fr));gap:.5rem}
+.choice{min-height:3.25rem;border:2px solid #8a8174;background:#fff;border-radius:12px;font:inherit;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.4rem .5rem;text-align:center;line-height:1.2;cursor:pointer}
+.choice svg{width:1.1rem;height:1.1rem;flex:none}
+.choice[aria-pressed="true"]{border-width:4px;border-color:var(--ink);background:#F1EEE7}
+.choice.c-good[aria-pressed="true"]{background:var(--done-soft);border-color:var(--done)}
+.choice.c-off[aria-pressed="true"]{background:var(--amber-soft);border-color:var(--amber-line)}
+.choice.c-bad[aria-pressed="true"]{background:var(--red-soft);border-color:var(--red-line)}
+.advice{margin:.6rem 0 0}
+
+/* forms */
+.field{margin:.75rem 0}
+.field label,.field .lbl{display:block;font-weight:700;margin-bottom:.25rem}
+input[type=text],input[type=date],textarea{font:inherit;padding:.55rem .65rem;border:2px solid #7d7468;border-radius:10px;background:#fff;color:var(--ink);width:100%;min-height:48px}
+.bp-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.bp-row input{width:5.5rem;text-align:center}
+.bp-row span{font-weight:800;font-size:1.2rem}
+.check{display:flex;gap:.75rem;align-items:flex-start;padding:.6rem 0;border-top:1px solid var(--line-soft);cursor:pointer}
+.check input{width:1.6rem;height:1.6rem;margin:.1rem 0 0;accent-color:var(--pri);flex:none}
+
+/* lists, tables, menus */
+.big-list{padding-left:1.35rem;margin:.4rem 0}
+.big-list li{margin:.45rem 0}
+.menu{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}
+.menu a{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:3.5rem;padding:.75rem 1rem;background:#fff;border:2px solid var(--line);border-radius:14px;color:var(--ink);font-weight:700;text-decoration:none}
+.menu a span.desc{display:block;font-weight:400;color:var(--muted);font-size:.9rem}
+.menu a .chev{font-size:1.5rem;color:var(--pri);flex:none}
+.wk-table{width:100%;border-collapse:collapse;font-size:min(.9rem,20px)}
+.wk-table th,.wk-table td{text-align:center;padding:.4rem .1rem;border-bottom:1px solid var(--line-soft)}
+.wk-table th[scope=row]{text-align:left;white-space:nowrap;padding-right:.4rem}
+.wk-table .mk{display:inline-flex;width:1.3rem;height:1.3rem}
+.wk-table .mk svg{width:100%;height:100%}
+.mk-done{color:var(--done)} .mk-partial{color:var(--amber)} .mk-rest{color:#555}
+.log-entry{border-top:1px solid var(--line-soft);padding:.6rem 0}
+.log-entry h3{margin:0 0 .2rem}
+.phase-list{list-style:none;padding:0;margin:.4rem 0}
+.phase-list li{padding:.5rem 0;border-top:1px solid var(--line-soft)}
+.phase-list strong{display:block}
+.scale-list{list-style:none;padding:0;margin:.4rem 0}
+.scale-list li{display:flex;gap:.75rem;align-items:flex-start;padding:.35rem 0}
+.scale-num{min-width:3.2rem;text-align:center;font-weight:800;border-radius:8px;padding:.1rem .3rem;border:2px solid var(--line)}
+.scale-go{background:var(--done-soft);border-color:var(--done)}
+.scale-stop{background:var(--red-soft);border-color:var(--red-line)}
+.call-999{font-size:1.15rem}
+
+/* bottom nav */
+.bottomnav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:2px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:20}
+.bottomnav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:68px;color:var(--ink);text-decoration:none;font-weight:800;font-size:min(.85rem,17px);line-height:1.1;text-align:center}
+.bottomnav svg{width:28px;height:28px}
+.bottomnav a[aria-current="page"]{color:var(--pri);background:var(--pri-soft);box-shadow:inset 0 4px 0 var(--pri)}
+.bottomnav a.nav-safety{color:var(--red)}
+.bottomnav a.nav-safety[aria-current="page"]{background:var(--red-soft);box-shadow:inset 0 4px 0 var(--red)}
+
+/* toast */
+.toast{pointer-events:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));background:#141414;color:#fff;padding:.65rem 1.1rem;border-radius:12px;font-weight:700;max-width:92vw;z-index:30;text-align:center}
+.toast:empty{display:none}
+
+/* timer */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;z-index:50;padding:1rem}
+.timer-box{background:#fff;border-radius:18px;padding:1.25rem;width:min(26rem,100%);text-align:center}
+.timer-display{font-size:min(4.5rem,88px);font-weight:800;font-variant-numeric:tabular-nums;margin:.25rem 0 .75rem;line-height:1.1}
+.timer-hint{color:var(--muted)}
+/* low-load layout */
+.date-line{font-size:1.1rem;font-weight:600;margin:-.3rem 0 .6rem}
+.center{text-align:center}
+.btn-big{min-height:3.75rem;font-size:1.15rem;border-radius:14px}
+.eyebrow{text-transform:uppercase;letter-spacing:.06em;font-size:.8rem;font-weight:800;color:var(--pri);margin:0 0 .15rem}
+.next-card{border:3px solid var(--pri);background:var(--pri-soft)}
+.next-card h2{font-size:1.45rem;margin-bottom:.1rem}
+.check-card{border:3px solid var(--pri)}
+.acts{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.act{display:flex;align-items:center;gap:.75rem;min-height:3.9rem;padding:.6rem .8rem;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);text-decoration:none}
+.act-mark{width:1.9rem;height:1.9rem;border:3px solid #8a8174;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;color:#fff}
+.act.is-done{background:var(--done-soft);border-color:var(--done)}
+.act.is-done .act-mark{background:var(--done);border-color:var(--done)}
+.act-mark svg{width:1.15rem;height:1.15rem}
+.act-body{flex:1;display:flex;flex-direction:column;min-width:0}
+.act-title{font-weight:800}
+.act-when{color:var(--muted);font-size:.9rem;line-height:1.3}
+.act.is-skip{background:#F1EEE8;border-style:dashed}
+.act.is-skip .act-when{color:var(--red);font-weight:700}
+.act .chev{font-size:1.6rem;color:var(--pri);flex:none}
+.more-details > summary{font-size:1.05rem}
+.toggle-row{width:100%;justify-content:flex-start;text-align:left;margin:.4rem 0}
+body.focus-mode .bottomnav{display:none}
+body.focus-mode{padding-bottom:0}
+.p-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.p-exit{display:inline-flex;align-items:center;min-height:48px;padding:0 .9rem;border:2px solid #8a8174;border-radius:12px;font-weight:800;text-decoration:none;color:var(--ink);background:#fff}
+.p-count{font-weight:800;color:var(--muted)}
+.p-bar{height:10px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin:.1rem 0 .9rem}
+.p-bar span{display:block;height:100%;background:var(--pri)}
+.p-meta{color:var(--muted);margin-top:-.2rem}
+.p-dose{display:inline-block;font-size:1.45rem;font-weight:800;color:var(--pri-2);background:var(--pri-soft);padding:.15rem .8rem;border-radius:12px;margin:0 0 .5rem;line-height:1.3}
+.p-light{color:var(--amber);font-weight:800;margin-top:0}
+.p-steps{font-size:1.06rem}
+.p-actions{position:sticky;bottom:0;background:var(--bg);padding:.6rem 0 calc(.6rem + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 2fr;gap:.6rem;margin-top:.8rem;border-top:1px solid var(--line-soft);z-index:5}
+.p-actions.single{grid-template-columns:1fr}
+.p-actions .btn{margin:0;min-height:3.75rem;font-size:1.15rem;white-space:nowrap;padding:.5rem .6rem}
+.kind-line{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;color:var(--done);font-weight:700;margin:-.2rem 0 1rem}
+.kind-line svg{width:1.3rem;height:1.3rem}
+.kind-line span{color:var(--ink)}
+.kind-line a{display:inline-flex;align-items:center;min-height:44px}
+.install-card{border:3px solid var(--pri)}
+.p-done-icon{width:5rem;height:5rem;border-radius:50%;background:var(--done);color:#fff;display:flex;align-items:center;justify-content:center;margin:.5rem auto}
+.p-done-icon svg{width:3rem;height:3rem}
+.choice-stack{display:grid;gap:.7rem;margin-top:1rem}
+.big-choice{display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;width:100%;min-height:4rem;padding:.8rem 1rem;border:3px solid var(--line);border-radius:14px;background:#fff;font:inherit;text-align:left;color:var(--ink);cursor:pointer;justify-content:center}
+.big-choice strong{font-size:1.15rem}
+.big-choice span{color:var(--muted);font-size:.92rem}
+.big-choice.c-good{border-color:var(--done)}
+.big-choice.c-off{border-color:var(--amber-line)}
+.big-choice.c-bad{border-color:var(--red-line)}
+.hf-list li{font-weight:600}
+.weight-big{font-size:1.6rem!important;text-align:center;max-width:10rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.topbar,.bottomnav,.toast,.small-btn,.done-btn{display:none!important}body{padding:0;background:#fff}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<header class="topbar">
+  <span class="brand">My Exercise Plan</span>
+  <div class="textsize" role="group" aria-label="Text size">
+    <button type="button" class="ts-btn" id="ts-down" data-action="ts-down" aria-label="Make text smaller">A−</button>
+    <button type="button" class="ts-btn" id="ts-up" data-action="ts-up" aria-label="Make text bigger">A+</button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <div class="notice n-amber">
+    <h1>The plan hasn't started yet</h1>
+    <p>This screen can't run the plan, so the buttons won't work.</p>
+    <p><strong>To fix this, open the file in Chrome or Samsung Internet:</strong></p>
+    <ol class="big-list">
+      <li>Download the file to your phone.</li>
+      <li>Open the <strong>My Files</strong> app and go to <strong>Downloads</strong>.</li>
+      <li>Tap the file and choose <strong>Chrome</strong> or <strong>Samsung Internet</strong>.</li>
+    </ol>
+  </div>
+</main>
+
+<nav class="bottomnav" aria-label="Main menu">
+  <a href="#/" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg><span>Today</span></a>
+  <a href="#/calendar" data-nav="calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Calendar</span></a>
+  <a href="#/safety" data-nav="safety" class="nav-safety"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M12 8v5M12 16.5v.3"/></svg><span>Safety</span></a>
+  <a href="#/more" data-nav="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>More</span></a>
+</nav>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="timer" class="overlay" hidden>
+  <div class="timer-box" role="dialog" aria-modal="true" aria-labelledby="timer-title">
+    <h2 id="timer-title">Timer</h2>
+    <p id="timer-display" class="timer-display">0:00</p>
+    <p class="timer-hint">Keep looking straight ahead. The phone will beep when time is up.</p>
+    <p id="timer-live" class="sr-only" aria-live="polite"></p>
+    <div class="btn-row">
+      <button type="button" class="btn" id="timer-pause" data-action="timer-pause">Pause</button>
+      <button type="button" class="btn btn-secondary" id="timer-close" data-action="timer-close">Stop</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+document.documentElement.classList.remove("no-js");
+function showFatal(msg) {
+  const m = document.getElementById("main"); if (!m) return;
+  const safe = String(msg || "Unknown error").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  m.insertAdjacentHTML("afterbegin", `<div class="notice n-red"><p><strong>Sorry, something went wrong.</strong> Please send a screenshot of this to the person who set up the plan.</p><p style="font-size:.8rem">${safe}</p></div>`);
+}
+window.addEventListener("error", e => showFatal(e.message));
+
+/* ================= Helpers ================= */
+const pad = n => String(n).padStart(2, "0");
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseKey = k => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d); };
+const todayKey = () => keyOf(new Date());
+const addDays = (k, n) => { const d = parseKey(k); d.setDate(d.getDate() + n); return keyOf(d); };
+const daysBetween = (a, b) => Math.round((parseKey(b) - parseKey(a)) / 86400000);
+const fmt = (k, opts) => parseKey(k).toLocaleDateString("en-GB", opts);
+const fmtLong = k => {
+  const sameYear = parseKey(k).getFullYear() === new Date().getFullYear();
+  return fmt(k, sameYear ? { weekday: "long", day: "numeric", month: "long" } : { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+};
+const fmtShort = k => fmt(k, { weekday: "short", day: "numeric", month: "short" });
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const isKey = s => /^\d{4}-\d{2}-\d{2}$/.test(s || "");
+
+/* ================= Storage ================= */
+const STORE_KEY = "exercisePlan.v1";
+const DEFAULT_START = "2026-11-02";
+const SCALE_NAMES = ["Standard", "Large", "Extra large"];
+let storageOK = false;
+try { localStorage.setItem("__ep", "1"); localStorage.removeItem("__ep"); storageOK = true; } catch (e) { storageOK = false; }
+const blank = () => ({ v: 1, settings: { scale: 1, start: DEFAULT_START, rate: "normal", wAlert: 2, autoRead: false, askWeight: true }, holds: [], setup: {}, days: {} });
+function merge(d) {
+  const b = blank();
+  if (!d || typeof d !== "object") return b;
+  return {
+    v: 1,
+    settings: Object.assign(b.settings, d.settings || {}),
+    holds: Array.isArray(d.holds) ? d.holds.filter(n => Number.isInteger(n) && n > 0) : [],
+    setup: d.setup && typeof d.setup === "object" ? d.setup : {},
+    days: d.days && typeof d.days === "object" ? d.days : {}
+  };
+}
+function load() {
+  if (!storageOK) return blank();
+  try { const raw = localStorage.getItem(STORE_KEY); return raw ? merge(JSON.parse(raw)) : blank(); } catch (e) { return blank(); }
+}
+function save() {
+  if (!storageOK) return;
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (e) { /* storage full or blocked */ }
+}
+let data = load();
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
+const rec = k => (data.days[k] = data.days[k] || {});
+
+/* ================= Icons ================= */
+const ICON = {
+  tick: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  half: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.3 8.3 0 1 1 9.4 4a6.6 6.6 0 0 0 10.6 10.6z" fill="currentColor"/></svg>',
+  dot: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>',
+  speaker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9.5v5h3.5L13 19V5L7.5 9.5z" fill="currentColor"/><path d="M16.2 9a4.2 4.2 0 0 1 0 6M18.8 6.4a7.8 7.8 0 0 1 0 11.2"/></svg>',
+  timer: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.8l2.4 2.2M9.5 2.8h5"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M12 8v5M12 16.5v.3"/></svg>'
+};
+
+/* ================= Exercise library ================= */
+const EX = {
+  ankle_pumps: { name: "Ankle pumps", where: "bed", also: "Also done sitting in a chair.", dose: ["10 times", "15 times", "20 times"],
+    steps: ["Point your toes away from you, like pressing a pedal.", "Then pull your toes back up towards you.", "Keep it slow and steady. Down and up is one."],
+    tip: "This squeezes blood from your legs back up to your heart and head. Do a few any time before you stand up." },
+  heel_slides: { name: "Heel slides", where: "bed", dose: ["5 each leg", "8 each leg", "10 each leg"],
+    steps: ["Lie on your back with a pillow under your head.", "Slowly slide one heel up the bed towards your bottom, bending your knee.", "Slowly slide it back down until your leg is straight.", "Do all of one leg, then the other."],
+    tip: "Keep your head resting still on the pillow. Only go as far as feels comfortable." },
+  belly_breaths: { name: "Slow belly breaths", where: "bed", also: "Can be done anywhere.", dose: "3 slow breaths",
+    steps: ["Rest a hand on your tummy.", "Breathe in slowly through your nose and feel your tummy rise.", "Breathe out slowly through your mouth, a little longer than the breath in."],
+    tip: "Never hold your breath during any exercise. Counting out loud is an easy way to keep breathing." },
+  get_up: { name: "Getting up in 3 stages", where: "bed", dose: "Every time you get up",
+    steps: ["Stage 1: Bend your knees and roll onto your side. Push up with your arms to sit on the edge of the bed as your legs lower to the floor. Keep your head in line with your body and move as one piece.",
+      "Stage 2: Sit for 1 to 2 minutes with your feet flat. Do 10 ankle pumps and 10 seated marches.",
+      "Stage 3: Stand up slowly, holding something firm. Stand still and count to 10 before you walk.",
+      "If you feel dizzy at any stage, sit or lie back down until it passes."],
+    tip: "This is the most important habit in the whole plan. Blood pressure is usually at its lowest first thing in the morning, after meals and after exercise." },
+  pelvic_tilt: { name: "Pelvic tilts", where: "bed", dose: ["5 times", "8 times", "10 times"],
+    steps: ["Lie on your back, knees bent, feet flat, pillow under your head.", "Gently flatten your lower back into the bed by tightening your tummy muscles.", "Hold for 3 seconds, then relax."],
+    tip: "Only a small movement is needed. Keep breathing." },
+  knee_hug: { name: "Single knee hug", where: "bed", dose: ["3 each leg, hold 10 seconds", "3 each leg, hold 15 seconds", "3 each leg, hold 20 seconds"],
+    steps: ["Lie on your back, knees bent, pillow under your head.", "Hold behind one thigh with both hands and gently draw that knee towards your chest.", "Hold while you breathe slowly, then lower it.", "Swap legs."],
+    tip: "Curling forward like this gives the nerves in your lower back more room, so it often eases back and leg symptoms. Keep your head on the pillow." },
+  knee_rocks: { name: "Knee rocks", where: "bed", dose: ["5 each way", "8 each way", "10 each way"],
+    steps: ["Lie on your back, knees bent and together, feet flat.", "Let both knees tip slowly a little way to one side.", "Bring them back to the middle, then a little way to the other side."],
+    tip: "Small and slow. Keep your head and shoulders still on the pillow." },
+  knee_fallout: { name: "Knee fall-outs", where: "bed", dose: ["5 each leg", "8 each leg", "10 each leg"],
+    steps: ["Lie on your back, knees bent, feet flat.", "Let one knee slowly fall out to the side, keeping the other still.", "Bring it back to the middle, then swap."],
+    tip: "Keep your lower back resting on the bed." },
+  seated_march: { name: "Seated marching", where: "chair", dose: ["2 minutes", "2 to 3 minutes", "3 minutes"],
+    steps: ["Sit tall towards the front of a firm chair, feet flat.", "Lift one knee a little, then put the foot down.", "Then the other. Keep a gentle, steady rhythm.", "Hold the chair arms if you like."],
+    tip: "Start slowly and build up gently. A slow warm-up is kinder to your heart. Keep looking straight ahead at something at eye level." },
+  shoulder_squeeze: { name: "Shoulder blade squeeze", where: "chair", dose: ["5 times", "8 times", "10 times"],
+    steps: ["Sit tall with your arms by your sides and elbows bent.", "Gently draw your elbows back and squeeze your shoulder blades together.", "Hold for 2 seconds, then relax."],
+    tip: "Keep your shoulders down, away from your ears, and your head still." },
+  knee_straighten: { name: "Knee straightening", where: "chair", dose: ["6 each leg", "2 rounds of 8 each leg", "2 rounds of 10 each leg, pausing at the top"],
+    steps: ["Sit tall, feet flat, hands resting on the chair arms.", "Slowly straighten one knee until your leg is out in front of you.", "Pause, then lower it slowly.", "Do all of one leg, then the other."],
+    tip: "Breathe out as you lift. Sit tall and don't lean back." },
+  pillow_squeeze: { name: "Cushion squeeze", where: "chair", dose: ["4 squeezes, hold 3 seconds", "5 squeezes, hold 3 seconds", "6 squeezes, hold 3 seconds"],
+    steps: ["Put a cushion or folded pillow between your knees.", "Squeeze your knees together gently, at about a third of your full effort.", "Hold while you count out loud to 3, then relax."],
+    tip: "Short, gentle holds only. Never strain, and count out loud so you keep breathing." },
+  thigh_press: { name: "Hands-on-thighs press", where: "chair", dose: ["4 presses, hold 3 seconds", "5 presses, hold 3 seconds", "6 presses, hold 3 seconds"],
+    steps: ["Put your hands flat on top of your thighs.", "Press down gently with your hands, and gently push your thighs up against them, at about a third of your full effort.", "Hold while you count out loud to 3, then relax."],
+    tip: "Gentle only. Keep your shoulders relaxed, your face soft, and keep breathing." },
+  arm_reach: { name: "Forward arm reach", where: "chair", dose: ["5 each arm", "8 each arm", "10 each arm"],
+    steps: ["Sit tall with your hands resting in your lap.", "Slowly reach one arm forward at chest height, as if reaching for a cup on a table.", "Bring it back slowly, then reach with the other arm.", "Keep your arms below shoulder height."],
+    tip: "Keep your head still, your eyes looking ahead, and breathe steadily." },
+  heel_toe: { name: "Heel and toe raises", where: "chair", dose: ["8 of each", "2 rounds of 10", "2 rounds of 12"],
+    steps: ["Sit with both feet flat on the floor.", "Lift both heels, keeping your toes down. Lower.", "Lift your toes, keeping your heels down. Lower.", "That is one of each."],
+    tip: "Your calf muscles act like a pump for your blood pressure, so these are well worth doing." },
+  band_row: { name: "Band pull", where: "chair", from: "From week 3", dose: ["1 round of 6", "2 rounds of 6", "2 rounds of 8"],
+    steps: ["Ask someone to loop a light resistance band around something sturdy in front of you at chest height, such as the handle of a closed door.", "Sit facing it and hold one end in each hand, arms out in front.", "Pull your elbows back and squeeze your shoulder blades together.", "Slowly let your arms go forward again."],
+    tip: "Use the lightest band. Keep your head still and your shoulders down." },
+  march_hold: { name: "Knee lift and hold", where: "chair", dose: ["4 each leg, hold 2 seconds", "6 each leg, hold 3 seconds", "8 each leg, hold 3 seconds"],
+    steps: ["Sit tall and hold the chair arms.", "Lift one knee a little and hold it there while you count.", "Lower it slowly, then swap legs."],
+    tip: "Small lifts are fine. Keep breathing." },
+  knee_push_out: { name: "Knee push-outs", where: "chair", from: "Weeks 1 and 2, then the band version", dose: ["4 pushes, hold 3 seconds", "5 pushes, hold 3 seconds", "6 pushes, hold 3 seconds"],
+    steps: ["Put your hands on the outside of your knees.", "Gently push your knees outwards into your hands, at about a third of your full effort, and hold them still with your hands.", "Hold while you count out loud to 3, then relax."],
+    tip: "Gentle only. This strengthens the hip muscles that help your balance." },
+  band_knee_open: { name: "Band knee opener", where: "chair", from: "From week 3", dose: ["1 round of 8", "2 rounds of 8", "2 rounds of 10"],
+    steps: ["Ask someone to tie a light band around your legs, just above your knees.", "Sit tall, feet flat.", "Slowly open your knees apart against the band.", "Slowly bring them back together."],
+    tip: "Keep your feet on the floor and your back against the chair." },
+  armrest_press: { name: "Armrest press", where: "chair", dose: ["4 presses, hold 3 seconds", "5 presses, hold 3 seconds", "6 presses, hold 3 seconds"],
+    steps: ["Sit in a chair with firm arms, feet flat.", "Put your hands on the chair arms.", "Push down gently through your hands as if to lift yourself, taking a little weight off your bottom.", "Hold while you count out loud to 3, then relax."],
+    tip: "This builds the arm strength you use to get out of a chair. You don't need to lift right up." },
+  chair_hover: { name: "Chair hover", where: "chair", from: "Weeks 3 to 6", goodDay: true, dose: ["3 hovers", "3 to 5 hovers", "5 hovers"],
+    steps: ["Sit near the front of a firm chair with arms. The chair should be against a wall so it can't move.", "Feet flat and slightly back, hands on the chair arms.", "Lean forward from your hips. Keep your head in line with your body and your eyes looking ahead.", "Lift your bottom just off the seat, a centimetre or two. Hold for 2 seconds, then sit back down slowly."],
+    tip: "Good days only. Have someone nearby the first few times. If you feel light-headed, sit back and rest." },
+  stand_pause: { name: "Stand up and pause", where: "chair", from: "From week 7", goodDay: true, dose: ["3 times", "3 times", "5 times"],
+    steps: ["Set up as for the chair hover, with something firm to hold in front of you, such as a walking frame or the worktop.", "Lean forward and push up through the chair arms to stand.", "Stand still, holding on, and count to 10. If you feel at all light-headed, gently squeeze your bottom and thighs.", "Reach back for the chair arms and sit down slowly. Rest for a minute before the next one."],
+    tip: "Good days only, with someone nearby. If you feel dizzy at any point, sit straight back down." },
+  arm_curl: { name: "Arm curls", where: "chair", from: "From week 3", dose: ["1 round of 6", "2 rounds of 6", "2 rounds of 8"],
+    steps: ["Sit tall holding a light weight in each hand. A tin of beans or a small bottle of water is fine.", "Palms facing up, bend your elbows to bring the weights up.", "Lower them slowly."],
+    tip: "Keep your elbows by your sides and breathe out as you lift. Never lift weights above your head." },
+  ankle_circles: { name: "Ankle circles", where: "chair", dose: "5 each way, each foot",
+    steps: ["Lift one foot slightly, or rest the heel on the floor.", "Draw slow circles with your toes, 5 one way and then 5 the other.", "Swap feet."],
+    tip: "Slow and smooth." },
+  sit_rest: { name: "Sit and rest before standing", where: "chair", dose: "2 minutes",
+    steps: ["Stay sitting for 2 minutes after you finish.", "Do 10 ankle pumps.", "Stand up slowly, holding something firm, and count to 10 before you walk."],
+    tip: "Blood pressure can dip for a short while after exercise. This stops you getting caught out." },
+  pedal: { name: "Pedalling", where: "chair", dose: "5 minutes, easy pace",
+    steps: ["Sit in a firm, stable chair with your back supported, not a low, soft armchair or a recliner.", "Put the pedaller on a non-slip mat, or against a wall, so it can't slide away.", "Set it to the lowest resistance.", "Pedal at an easy pace. You should be able to talk in full sentences.", "If you get more out of breath than that, slow down or stop for a minute."],
+    tip: "Pedalling 15 to 30 minutes after a meal helps keep blood sugar down. When you finish, stay sitting for 2 minutes, then stand up slowly. Wear socks and shoes." },
+  counter_cross: { name: "Leg-cross squeeze", where: "stand", from: "Practice from week 7", goodDay: true, dose: ["3 times, hold 5 seconds", "3 times, hold 5 seconds", "3 times, hold 10 seconds"],
+    steps: ["Stand at the kitchen worktop, holding on with both hands.", "Cross one leg in front of the other.", "Squeeze your thighs, bottom and tummy firmly, but don't strain. Hold while you count out loud.", "Relax and uncross. Swap legs next time."],
+    tip: "This is your rescue move. If you ever feel light-headed when standing, cross your legs and squeeze, because it pushes blood back up to your head. If the feeling doesn't pass quickly, sit down." },
+  standing_heel_raise: { name: "Standing heel raises", where: "stand", from: "From week 7", goodDay: true, dose: ["8 times", "8 times", "2 rounds of 8"],
+    steps: ["Stand at the worktop, holding on with both hands.", "Rise up slowly onto your toes.", "Lower slowly."],
+    tip: "Keep looking straight ahead, not down at your feet." },
+  march_spot: { name: "Marching on the spot", where: "stand", from: "From week 7", goodDay: true, dose: ["20 seconds", "20 seconds", "30 seconds"],
+    steps: ["Hold the worktop with both hands.", "March gently on the spot, lifting your feet a little."],
+    tip: "Stop and sit if you feel light-headed." },
+  supported_walk: { name: "Supported walk", where: "walk", from: "From week 7", goodDay: true, dose: "5 minutes",
+    steps: ["Walk indoors, along a hallway or in the garden on level ground.", "Use your walking aid, a rail or a rollator. Leaning slightly forward on a rollator often eases back and leg symptoms.", "Walk at an easy pace and look ahead, not down.", "If your legs get tingly, heavy or achy, sit down and lean forward until it eases."],
+    tip: "Good days only, with someone with you. Turn around slowly in a wide circle rather than swinging your head round." }
+};
+const D = (id, lvl) => { const d = EX[id].dose; return Array.isArray(d) ? d[Math.max(1, Math.min(lvl, d.length)) - 1] : d; };
+const item = (ex, dose, extra) => Object.assign({ ex, dose }, extra || {});
+
+/* ================= The plan ================= */
+const PHASES = {
+  p1: { name: "Settling in", level: 1, dose: 1 },
+  p2: { name: "Building up", level: 2, dose: 2 },
+  p2e: { name: "Easier week", level: 2, dose: 1 },
+  p3: { name: "Getting stronger", level: 3, dose: 3 },
+  p3e: { name: "Review week", level: 3, dose: 2 },
+  m: { name: "Keep it going", level: 3, dose: 3 }
+};
+const phaseKey = w => w <= 2 ? "p1" : w <= 5 ? "p2" : w === 6 ? "p2e" : w <= 11 ? "p3" : w === 12 ? "p3e" : "m";
+const PEDAL_MIN = [5, 5, 6, 8, 8, 6, 8, 10, 10, 12, 12, 10];
+const pedalMins = w => w <= 12 ? PEDAL_MIN[w - 1] : 12;
+const WEEK_NOTES = {
+  1: "First week: go gently. Doing less is fine. The aim is to build the habit.",
+  2: "New this week: a second short pedal after your evening meal.",
+  3: "New this week: a light resistance band, light weights (tins are fine) and the chair hover. Ask someone to help set up the band the first time.",
+  6: "Easier week: the same exercises with fewer repetitions, so your body can recover and get stronger.",
+  7: "New this week: standing practice and short supported walks. Good days only, with someone nearby.",
+  12: "Review week: a little easier. A good time to share your progress log with your GP or physio."
+};
+const DAY_PATTERN = ["A", "E", "B", "E", "A", "E", "R"];
+const TYPE_LABEL = { A: "Strength day", B: "Strength day", E: "Easy day", R: "Rest day" };
+
+function position(key) {
+  const n = daysBetween(data.settings.start, key);
+  if (n < 0) return null;
+  const calWeek = Math.floor(n / 7);
+  const dayIdx = n % 7;
+  const week = calWeek + 1 - data.holds.filter(h => h <= calWeek).length;
+  return { calWeek, dayIdx, week, repeat: data.holds.includes(calWeek) };
+}
+
+function blockWake(ph) {
+  return { id: "wake", kind: "wake", title: "Wake-up routine", when: "In bed, before you get up", mins: "About 5 minutes", short: "Before you get up", minsShort: "5 minutes",
+    note: "If your heart failure team allows it, keep a drink by your bed and have some before you get up. Always stay within the daily fluid amount they've given you.",
+    sections: [{ items: [item("ankle_pumps", D("ankle_pumps", ph.dose)), item("heel_slides", D("heel_slides", ph.dose)), item("belly_breaths", "3 slow breaths"), item("get_up", "Every time you get up", { timer: 60, timerLabel: "Sit on the edge of the bed" })] }] };
+}
+function blockStrength(type, ph) {
+  const L = ph.level, d = ph.dose;
+  const warm = [item("seated_march", D("seated_march", d), { timer: [120, 150, 180][d - 1], timerLabel: "Seated marching" }), item("ankle_pumps", D("ankle_pumps", d)), item("shoulder_squeeze", D("shoulder_squeeze", d))];
+  let main;
+  if (type === "A") {
+    main = [item("knee_straighten", D("knee_straighten", d)), item("pillow_squeeze", D("pillow_squeeze", d)), item("heel_toe", D("heel_toe", d)), item("thigh_press", D("thigh_press", d)), item("arm_reach", D("arm_reach", d))];
+    if (L >= 2) main.push(item("band_row", D("band_row", d)));
+  } else {
+    main = [item("march_hold", D("march_hold", d)), L >= 2 ? item("band_knee_open", D("band_knee_open", d)) : item("knee_push_out", D("knee_push_out", d)), item("heel_toe", D("heel_toe", d)), item("armrest_press", D("armrest_press", d))];
+    if (L === 2) main.push(item("chair_hover", D("chair_hover", d), { goodDay: true }));
+    if (L >= 3) main.push(item("stand_pause", D("stand_pause", d), { goodDay: true }));
+    if (L >= 2) main.push(item("arm_curl", D("arm_curl", d)));
+    main.push(item("ankle_circles", D("ankle_circles", d)));
+  }
+  const cool = [item("seated_march", "2 minutes, slowly", { timer: 120, timerLabel: "Slow marching" }), item("belly_breaths", "3 slow breaths"), item("sit_rest", "2 minutes", { timer: 120, timerLabel: "Sit and rest" })];
+  return { id: "strength", kind: "strength", title: "Seated strength", sub: type === "A" ? "Session A" : "Session B",
+    when: "Mid-morning or mid-afternoon, at least an hour after a big meal", mins: ["About 15 minutes", "15 to 20 minutes", "20 to 25 minutes"][d - 1], short: "Mid-morning or mid-afternoon", minsShort: ["15 minutes", "15 to 20 minutes", "20 to 25 minutes"][d - 1],
+    note: "Use a firm chair with arms, with its back against a wall. Holds are short and gentle, never straining. Rest for a minute or so between exercises, longer if you need it.",
+    sections: [{ title: "Warm up", items: warm }, { title: "Exercises", items: main }, { title: "Cool down", items: cool }] };
+}
+function blockStanding(ph) {
+  const d = ph.dose;
+  return { id: "standing", kind: "standing", optional: true, goodDay: true, title: "Standing practice", when: "After your 2-minute sit at the end of the seated session. Good days only, with someone nearby.", mins: "About 5 minutes", short: "After your seated session", minsShort: "5 minutes",
+    note: "Stand at the kitchen worktop and hold on with both hands. Sit down at once if you feel light-headed.",
+    sections: [{ items: [item("counter_cross", D("counter_cross", d)), item("standing_heel_raise", D("standing_heel_raise", d)), item("march_spot", D("march_spot", d))] }] };
+}
+function blockEase(ph) {
+  const d = ph.dose;
+  return { id: "ease", kind: "ease", title: "Back ease and breathe", when: "Lying on your bed, at any time that suits you", mins: "About 10 minutes", short: "On your bed, any time", minsShort: "10 minutes",
+    note: "Have a pillow under your head so your neck stays level. Get up in 3 stages afterwards.",
+    sections: [{ items: [item("pelvic_tilt", D("pelvic_tilt", d)), item("knee_hug", D("knee_hug", d)), item("knee_rocks", D("knee_rocks", d)), item("knee_fallout", D("knee_fallout", d)), item("belly_breaths", "5 slow breaths"), item("get_up", "When you finish", { timer: 60, timerLabel: "Sit on the edge of the bed" })] }] };
+}
+function blockWalk(week) {
+  const mins = week <= 8 ? "5 minutes" : "5 to 10 minutes";
+  return { id: "walk", kind: "walk", optional: true, goodDay: true, title: "Supported walk", when: "Good days only, with someone with you", mins, short: "With someone with you", minsShort: mins,
+    sections: [{ items: [item("supported_walk", mins)] }] };
+}
+function blockPedal(id, title, when, mins, optional, short) {
+  return { id, kind: "pedal", optional: !!optional, title, when, mins: `${mins} minutes`, short: short || when, minsShort: `${mins} minutes`,
+    note: "Lowest resistance, easy pace. If you need to, split it up: pedal for 2 minutes, rest for 1, and repeat. Stay seated for 2 minutes when you finish.",
+    sections: [{ items: [item("pedal", `${mins} minutes, easy pace`, { timer: mins * 60, timerLabel: "Pedalling" })] }] };
+}
+
+function buildDay(key) {
+  const pos = position(key);
+  if (!pos) return { key, before: true, blocks: [] };
+  const pk = phaseKey(pos.week), ph = PHASES[pk];
+  let type = DAY_PATTERN[pos.dayIdx];
+  if (type === "A" && pos.dayIdx === 4 && ph.level >= 3 && pos.week % 2 === 0) type = "B";
+  const blocks = [blockWake(ph)];
+  if (type === "A" || type === "B") {
+    blocks.push(blockStrength(type, ph));
+    if (ph.level >= 3) blocks.push(blockStanding(ph));
+  } else if (type === "E") {
+    blocks.push(blockEase(ph));
+    if (ph.level >= 3 && (pos.dayIdx === 3 || pos.dayIdx === 5)) blocks.push(blockWalk(pos.week));
+  }
+  if (type !== "R") {
+    blocks.push(blockPedal("pedal1", "Pedal after lunch", "About 15 to 30 minutes after lunch", pedalMins(pos.week), false, "After lunch"));
+    if (pos.week >= 2) blocks.push(blockPedal("pedal2", "Pedal after your evening meal", "About 15 to 30 minutes after your evening meal", pedalMins(pos.week), false, "After your evening meal"));
+  } else {
+    blocks.push(blockPedal("pedalRest", "Easy pedal", "After a meal, only if you feel like it", 5, true, "After a meal, if you feel like it"));
+  }
+  return { key, pos, pk, ph, type, typeLabel: TYPE_LABEL[type], blocks };
+}
+
+function dayStatus(day) {
+  if (day.before) return "before";
+  const r = data.days[day.key] || {}, b = r.b || {};
+  const req = day.blocks.filter(x => !x.optional);
+  const nDone = req.filter(x => b[x.id]).length;
+  if (req.length && nDone === req.length) return "done";
+  if (r.feel === "unwell") return "rested";
+  if (day.blocks.some(x => b[x.id])) return "partial";
+  if (day.type === "R") return "rest";
+  return "todo";
+}
+
+/* ================= Shared bits ================= */
+const FEEL = { good: "Good", off: "A bit off", unwell: "Unwell or dizzy" };
+const EFFORT = { easy: "Easy", right: "About right", hard: "Too hard" };
+const DIZZY = { none: "None", little: "A little", lot: "A lot" };
+const canSpeak = "speechSynthesis" in window && typeof window.SpeechSynthesisUtterance !== "undefined";
+const state = { pstep: 0, pFor: null, cstep: 0, cFor: null, autoSpeak: false, month: (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); })(), dayKey: todayKey() };
+
+function speakBtn(id, label) {
+  if (!canSpeak) return "";
+  return `<button type="button" class="small-btn" data-action="speak" data-speak-id="${esc(id)}" aria-pressed="false">${ICON.speaker}<span class="lbl">${esc(label || "Read aloud")}</span></button>`;
+}
+function choiceGroup(id, label, field, options, current, disabled, tag) {
+  const H = tag || "h3";
+  return `<div class="choice-group" role="group" aria-labelledby="${id}-l"><${H} id="${id}-l" class="choice-label">${esc(label)}</${H}><div class="choices">` +
+    options.map(o => `<button type="button" id="${id}-${o.v}" class="choice ${o.cls || ""}" aria-pressed="${current === o.v}" data-action="set" data-field="${field}" data-val="${o.v}"${disabled ? " disabled" : ""}>${current === o.v ? ICON.tick : ""}<span>${esc(o.t)}</span></button>`).join("") +
+    `</div></div>`;
+}
+function recentStats(endKey, n) {
+  let hard = 0, lot = 0;
+  for (let i = 0; i < n; i++) { const r = data.days[addDays(endKey, -i)]; if (!r) continue; if (r.effort === "hard") hard++; if (r.dizzy === "lot") lot++; }
+  return { hard, lot };
+}
+const numW = v => { const n = parseFloat(String(v || "").replace(",", ".")); return isFinite(n) && n > 20 && n < 300 ? n : null; };
+function weightGain(k) {
+  const r = data.days[k]; const w = numW(r && r.weight); if (w == null) return null;
+  let best = null;
+  for (let i = 1; i <= 3; i++) {
+    const p = data.days[addDays(k, -i)], pw = numW(p && p.weight);
+    if (pw != null && (best == null || w - pw > best.gain)) best = { gain: w - pw, days: i };
+  }
+  const limit = Number(data.settings.wAlert) || 2;
+  return best && best.gain >= limit - 1e-9 ? best : null;
+}
+function weightAlertHTML(k) {
+  const g = weightGain(k); if (!g) return "";
+  return `<div class="notice n-red"><h2>Weight check</h2><p>Your weight is up <strong>${g.gain.toFixed(1)} kg</strong> in ${g.days} ${g.days === 1 ? "day" : "days"}. This can be a sign of fluid building up.</p><p><strong>Don't exercise today, and contact your heart failure nurse or GP today.</strong></p></div>`;
+}
+function repeatControl(calWeek) {
+  const next = calWeek + 1;
+  if (data.holds.includes(next)) return `<p><strong>Next week will repeat this week's level.</strong></p><button type="button" class="small-btn" id="undo-repeat" data-action="undo-repeat" data-cw="${next}">Undo that</button>`;
+  return `<button type="button" class="btn btn-secondary" id="repeat-week" data-action="repeat-week" data-cw="${next}">Repeat this level next week</button>`;
+}
+function alertsHTML() {
+  const s = recentStats(todayKey(), 7);
+  const pos = position(todayKey());
+  let h = "";
+  if (s.lot >= 2) h += `<div class="notice n-red"><h2>Dizziness this week</h2><p>You've had a lot of dizziness on ${s.lot} days in the last week. Please tell your GP. Until you've spoken to them, stick to the lying and seated exercises.</p></div>`;
+  if (s.hard >= 2) h += `<div class="notice n-amber"><h2>Feeling it?</h2><p>You marked ${s.hard} days as "too hard" in the last week. That's useful to know. It's fine to stay at this level for another week.</p>${pos ? repeatControl(pos.calWeek) : ""}</div>`;
+  return h;
+}
+
+/* ================= Views ================= */
+const KIND = {
+  normal: { t: "Normal day", cls: "n-info", m: "Follow the plan as it is. Stop if anything feels wrong." },
+  light: { t: "Lighter day", cls: "n-amber", m: "Do the seated and lying parts gently, about half of each. The standing parts are skipped today." },
+  rest: { t: "Rest day", cls: "n-red", m: "Rest today. Only do your wake-up routine if it feels comfortable." }
+};
+const restToday = (key, r) => r.feel === "unwell" || !!weightGain(key);
+const isSkipped = (b, r, key) => restToday(key, r) ? b.id !== "wake" : (r.feel === "off" && !!b.goodDay);
+const dayKind = (key, r) => restToday(key, r) ? "rest" : r.feel === "off" ? "light" : r.feel === "good" ? "normal" : null;
+const greeting = () => { const hr = new Date().getHours(); return hr < 12 ? "Good morning" : hr < 18 ? "Good afternoon" : "Good evening"; };
+const whenLine = b => `${b.short} · about ${b.minsShort}`;
+
+function kindHTML(key, r, withRedo) {
+  const k = dayKind(key, r); if (!k) return "";
+  const K = KIND[k];
+  let extra = "";
+  if (k === "rest" && !weightGain(key)) {
+    extra = r.hf === "yes"
+      ? `<p><strong>Contact your heart failure nurse or GP today.</strong> Call 999 for chest pain or severe breathlessness.</p>`
+      : `<p>If you feel dizzy while sitting still, or this lasts more than a day or two, contact your GP or call NHS 111.</p>`;
+  }
+  return `<section class="notice ${K.cls}"><h2>Today: ${K.t}</h2><p>${K.m}</p>${extra}${withRedo ? `<a class="small-btn" href="#/check">Redo my check</a>` : ""}</section>`;
+}
+
+function nextUp(day, r, key) {
+  let list = day.blocks.filter(b => !(r.b && r.b[b.id]) && !isSkipped(b, r, key) && (!b.optional || r.feel === "good"));
+  if (new Date().getHours() >= 11) list = list.filter(b => b.id !== "wake").concat(list.filter(b => b.id === "wake"));
+  return list[0] || null;
+}
+function nextUpHTML(day, r, key) {
+  const n = nextUp(day, r, key);
+  if (!n) {
+    const msg = restToday(key, r) || day.type === "R" ? "That's everything for today. Enjoy your rest." : "Well done. Rest and enjoy the rest of your day.";
+    return `<section class="notice n-info"><h2>All done for today</h2><p>${msg}</p></section>`;
+  }
+  return `<section class="card next-card" aria-labelledby="next-h"><p class="eyebrow">Next up</p><h2 id="next-h">${esc(n.title)}</h2><p>${esc(whenLine(n))}</p>
+    <a class="btn btn-big" href="#/go/${key}/${n.id}">Start</a></section>`;
+}
+
+function actRow(b, r, key) {
+  const done = !!(r.b && r.b[b.id]), skip = isSkipped(b, r, key);
+  const sub = skip ? "Skip today" : whenLine(b) + (b.optional ? " · optional" : "");
+  return `<li><a class="act${done ? " is-done" : ""}${skip ? " is-skip" : ""}" href="#/go/${key}/${b.id}">
+    <span class="act-mark" aria-hidden="true">${done ? ICON.tick : ""}</span>
+    <span class="act-body"><span class="act-title">${esc(b.title)}</span><span class="act-when">${esc(sub)}</span></span>
+    <span class="sr-only">${done ? "Done." : "Not done yet."}</span><span class="chev" aria-hidden="true">›</span></a></li>`;
+}
+
+function moreDetailsHTML(key, r, isFuture, isToday) {
+  const bp = r.bp || {}, dis = isFuture ? " disabled" : "";
+  let h = `<details class="card more-details" id="dt-more"><summary>More details (optional)</summary>
+    <p class="muted">For keeping a record for your family or GP. You don't have to fill these in.</p>`;
+  if (!isToday) h += choiceGroup("feel", "How were you feeling?", "feel", [{ v: "good", t: "Good", cls: "c-good" }, { v: "off", t: "A bit off", cls: "c-off" }, { v: "unwell", t: "Unwell or dizzy", cls: "c-bad" }], r.feel, isFuture);
+  h += choiceGroup("effort", "How hard did it feel?", "effort", [{ v: "easy", t: "Easy" }, { v: "right", t: "About right" }, { v: "hard", t: "Too hard" }], r.effort, isFuture);
+  h += choiceGroup("dizzy", "Any dizziness?", "dizzy", [{ v: "none", t: "None" }, { v: "little", t: "A little" }, { v: "lot", t: "A lot" }], r.dizzy, isFuture);
+  h += `<div class="field"><label for="weight-in">Morning weight in kg</label><input type="text" id="weight-in" inputmode="decimal" maxlength="5" data-rec="weight" value="${esc(r.weight)}" placeholder="e.g. 78.4"${dis}></div>
+    <div class="field"><span class="lbl" id="bp-sit-l">Sitting blood pressure</span><div class="bp-row" role="group" aria-labelledby="bp-sit-l">
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Sitting, top number" data-rec="bp.sitS" value="${esc(bp.sitS)}"${dis}><span aria-hidden="true">/</span>
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Sitting, bottom number" data-rec="bp.sitD" value="${esc(bp.sitD)}"${dis}></div></div>
+    <div class="field"><span class="lbl" id="bp-st-l">Standing blood pressure (after 1 minute)</span><div class="bp-row" role="group" aria-labelledby="bp-st-l">
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Standing, top number" data-rec="bp.stS" value="${esc(bp.stS)}"${dis}><span aria-hidden="true">/</span>
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Standing, bottom number" data-rec="bp.stD" value="${esc(bp.stD)}"${dis}></div></div>
+    <div class="field"><label for="note-in">Notes</label><textarea id="note-in" rows="3" maxlength="500" data-rec="note" placeholder="For example: dizzy after lunch"${dis}>${esc(r.note)}</textarea></div>
+  </details>`;
+  return h;
+}
+
+function viewDay(key) {
+  const t = todayKey(), isToday = key === t, isFuture = key > t, day = buildDay(key);
+  const r = data.days[key] || {};
+  let h = isToday
+    ? `<h1 tabindex="-1">${greeting()}</h1><p class="date-line">${esc(fmt(key, { weekday: "long", day: "numeric", month: "long" }))}</p>`
+    : `<a class="back-link" href="#/calendar">‹ Calendar</a><h1 tabindex="-1">${esc(fmtLong(key))}</h1>`;
+  if (isToday && !storageOK) h += `<div class="notice n-amber"><p><strong>Ticks can't be saved when the plan is opened this way.</strong> See <a href="#/help">Keep this on your phone</a>.</p></div>`;
+  if (day.before) {
+    const s = data.settings.start, n = daysBetween(t, s);
+    if (isToday) h += installCardHTML() + `<section class="card"><h2>Your plan starts ${n === 1 ? "tomorrow" : "on " + esc(fmtLong(s))}</h2>${n === 1 ? `<p>${esc(fmtLong(s))}</p>` : ""}<p>Today, get ready: read <strong>Before you start</strong> and the <strong>Safety</strong> page, and set up your chair and pedaller.</p><a class="btn btn-big" href="#/start">Before you start</a><a class="btn btn-secondary" href="#/safety">Safety</a></section>`;
+    else h += `<div class="notice n-info"><p>This is before your plan starts on <strong>${esc(fmtLong(s))}</strong>.</p></div><a class="btn" href="#/">Go to today</a>`;
+    return h;
+  }
+  const wn = weekNote(day);
+  if (isToday) {
+    h += `<p class="day-sub"><strong>${day.typeLabel}</strong></p>`;
+    h += installCardHTML();
+    h += weightAlertHTML(key);
+    if (!r.checked) h += `<section class="card check-card"><h2>First, a quick check</h2><p>A few short questions to decide what kind of day to have.</p><a class="btn btn-big" href="#/check">Start my check</a></section>`;
+    else if (dayKind(key, r) !== "normal") h += kindHTML(key, r, true);
+    if (r.checked) h += nextUpHTML(day, r, key);
+    if (r.checked && dayKind(key, r) === "normal") h += `<p class="kind-line">${ICON.tick}<span>Today: normal day.</span> <a href="#/check">Redo my check</a></p>`;
+    if (wn) h += `<div class="notice n-info"><p>${esc(wn)}</p></div>`;
+    h += alertsHTML();
+  } else {
+    h += `<p class="day-sub">Week ${day.pos.week} · <strong>${day.typeLabel}</strong></p>`;
+    if (wn) h += `<div class="notice n-info"><p>${esc(wn)}</p></div>`;
+    h += weightAlertHTML(key);
+    if (isFuture) h += `<div class="notice n-info"><p>This day hasn't come yet. You can look through it now.</p></div>`;
+    h += kindHTML(key, r, false);
+  }
+  h += `<section class="card" aria-labelledby="plan-h"><h2 id="plan-h">${isToday ? "Today's plan" : "The plan for this day"}</h2><ul class="acts">${day.blocks.map(b => actRow(b, r, key)).join("")}</ul></section>`;
+  if (isToday) h += `<p class="safety-strip"><a href="#/safety">${ICON.shield}<span>Feel dizzy or unwell? <strong>Stop and sit down.</strong> Tap for safety advice.</span></a></p>`;
+  h += moreDetailsHTML(key, r, isFuture, isToday);
+  if (!isToday) h += `<div class="btn-row"><a class="btn btn-secondary" href="${addDays(key, -1) === t ? "#/" : "#/day/" + addDays(key, -1)}">‹ Day before</a><a class="btn btn-secondary" href="${addDays(key, 1) === t ? "#/" : "#/day/" + addDays(key, 1)}">Day after ›</a></div><a class="btn" href="#/">Go to today</a>`;
+  return h;
+}
+
+/* ----- Morning check (one question per screen) ----- */
+function viewCheck() {
+  const k = todayKey(), r = data.days[k] || {}, askW = data.settings.askWeight !== false;
+  const total = askW ? 3 : 2, step = state.cstep;
+  const close = `<div class="p-top"><a class="p-exit" href="#/">✕ Close</a>${step < 3 ? `<span class="p-count">Question ${step + 1} of ${total}</span>` : ""}</div>`;
+  if (step === 0) return close + `<h1 tabindex="-1">Do you have any of these today?</h1>
+    <ul class="big-list hf-list"><li>More out of breath than usual</li><li>More swelling in your ankles, legs or tummy</li><li>Needed extra pillows, or woke up breathless in the night</li><li>Chest pain, or a racing or fluttering heart</li><li>A cold, flu or a temperature</li></ul>
+    <div class="choice-stack"><button type="button" class="big-choice c-good" data-action="chk-hf" data-val="no"><strong>No, none of these</strong></button>
+    <button type="button" class="big-choice c-bad" data-action="chk-hf" data-val="yes"><strong>Yes, at least one</strong></button></div>`;
+  if (step === 1) return close + `<h1 tabindex="-1">How are you feeling?</h1><div class="choice-stack">
+    <button type="button" class="big-choice c-good" data-action="chk-feel" data-val="good"><strong>Good</strong><span>Ready to go</span></button>
+    <button type="button" class="big-choice c-off" data-action="chk-feel" data-val="off"><strong>A bit off</strong><span>Tired, achy or a little dizzy</span></button>
+    <button type="button" class="big-choice c-bad" data-action="chk-feel" data-val="unwell"><strong>Unwell or dizzy</strong><span>Not up to it today</span></button></div>`;
+  if (step === 2) return close + `<h1 tabindex="-1">What do you weigh this morning?</h1><p>After the toilet and before breakfast, on the same scales as usual.</p>
+    <div class="field"><label for="chk-weight">Weight in kg</label><input type="text" id="chk-weight" class="weight-big" inputmode="decimal" maxlength="5" value="${esc(r.weight)}" placeholder="78.4"></div>
+    <button type="button" class="btn btn-big" data-action="chk-wsave">Save</button>
+    <button type="button" class="btn btn-secondary" data-action="chk-wskip">Skip, I haven't weighed myself</button>`;
+  return `<div class="p-top"><a class="p-exit" href="#/">✕ Close</a></div><h1 tabindex="-1">Thank you</h1>` + weightAlertHTML(k) + kindHTML(k, r, false) +
+    `<a class="btn btn-big" href="#/">See today's plan</a>`;
+}
+
+/* ----- Guided session (one exercise per screen) ----- */
+function playerItems(b, r) {
+  const out = [];
+  for (const s of b.sections) for (const it of s.items) {
+    const good = it.goodDay || EX[it.ex].goodDay;
+    if (good && !b.goodDay && r.feel && r.feel !== "good") continue;
+    out.push(Object.assign({ section: s.title || "" }, it));
+  }
+  return out;
+}
+function playerCtx() {
+  const { arg, arg2 } = route();
+  const key = isKey(arg) ? arg : todayKey();
+  const day = buildDay(key), b = day.blocks.find(x => x.id === arg2);
+  if (!b) return null;
+  const r = data.days[key] || {};
+  const items = playerItems(b, r);
+  const isFuture = key > todayKey();
+  const qs = !isFuture && (b.id === "strength" || b.id === "ease") ? ["effort", "dizzy"] : [];
+  return { key, day, b, r, items, total: items.length, qs, final: items.length + 1 + qs.length, back: key === todayKey() ? "#/" : "#/day/" + key, isFuture };
+}
+function stepSpeech(it) { return exSpeech(it.ex, it.dose); }
+function viewPlayer() {
+  const c = playerCtx();
+  if (!c) return `<p>Sorry, that activity wasn't found.</p><a class="btn" href="#/">Back to today</a>`;
+  const { key, b, r, items, total, back, isFuture, qs, final } = c;
+  const step = Math.max(0, Math.min(state.pstep, final));
+  const done = !!(r.b && r.b[b.id]);
+  const light = r.feel === "off";
+  if (step === 0) {
+    const skip = isSkipped(b, r, key);
+    let h = `<div class="p-top"><a class="p-exit" href="${back}">✕ Close</a></div><h1 tabindex="-1">${esc(b.title)}</h1><p class="p-meta">${esc(whenLine(b))}</p>`;
+    if (done) h += `<div class="notice n-info"><p><strong>Done.</strong> Well done!</p></div>`;
+    if (skip) h += `<div class="notice n-amber"><p>${restToday(key, r) ? "It's a rest day today, so skip this one." : "It's a lighter day today, so skip this one."}</p></div>`;
+    else if (light) h += `<div class="notice n-amber"><p><strong>Lighter day:</strong> do about half of each exercise.</p></div>`;
+    if (b.goodDay && !skip) h += `<p><span class="tag tag-good">Good days only</span> With someone nearby.</p>`;
+    if (b.note) h += `<p class="note">${esc(b.note)}</p>`;
+    h += `<p>${total === 1 ? "There's one exercise." : `You'll do ${total} exercises, one at a time.`}</p>
+      <details id="dt-list"><summary>See the list</summary><ol class="steps">${items.map(it => `<li>${esc(EX[it.ex].name)}: ${esc(it.dose)}</li>`).join("")}</ol></details>`;
+    h += `<div class="p-actions single"><button type="button" class="btn btn-big${skip ? " btn-secondary" : ""}" data-action="p-next">${isFuture || skip ? "Have a look" : done ? "Do it again" : "Start"}</button></div>`;
+    if (!isFuture) h += done ? `<button type="button" class="btn btn-secondary" data-action="p-untick">Remove the tick</button>` : `<button type="button" class="btn btn-secondary" data-action="p-quickdone">I've already done this</button>`;
+    return h;
+  }
+  if (step <= total) {
+    const it = items[step - 1], e = EX[it.ex], pct = Math.round(((step - 1) / total) * 100);
+    const good = it.goodDay || e.goodDay;
+    let h = `<div class="p-top"><a class="p-exit" href="${back}">✕ Close</a><span class="p-count">${step} of ${total}</span></div>
+      <div class="p-bar" aria-hidden="true"><span style="width:${pct}%"></span></div>`;
+    if (it.section) h += `<p class="eyebrow">${esc(it.section)}</p>`;
+    h += `<h1 tabindex="-1">${esc(e.name)}</h1><p class="p-dose">${esc(it.dose)}</p>`;
+    if (light) h += `<p class="p-light">Lighter day: about half</p>`;
+    if (good && !b.goodDay) h += `<p><span class="tag tag-good">Good days only</span> With someone nearby.</p>`;
+    h += `<ol class="steps p-steps">${e.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>`;
+    if (e.tip) h += `<p class="tip"><strong>Tip:</strong> ${esc(e.tip)}</p>`;
+    if (it.timer) h += `<button type="button" class="btn btn-secondary" data-action="timer" data-secs="${it.timer}" data-label="${esc(it.timerLabel || e.name)}">${ICON.timer}<span>Start ${esc(timerText(it.timer))} timer</span></button>`;
+    if (canSpeak) h += `<button type="button" class="small-btn" id="p-read" data-action="p-read" aria-pressed="${!!data.settings.autoRead}">${ICON.speaker}<span>Read each step aloud</span></button>`;
+    h += `<div class="p-actions"><button type="button" class="btn btn-secondary" id="p-back" data-action="p-back">‹ Back</button><button type="button" class="btn" id="p-next" data-action="p-next">${step === total ? "Finish" : "Next ›"}</button></div>`;
+    return h;
+  }
+  if (step < final) {
+    const q = qs[step - total - 1];
+    const Q = q === "effort"
+      ? { h: "How hard did that feel?", o: [["easy", "Easy", "c-good"], ["right", "About right", "c-good"], ["hard", "Too hard", "c-off"]] }
+      : { h: "Any dizziness?", o: [["none", "None", "c-good"], ["little", "A little", "c-off"], ["lot", "A lot", "c-bad"]] };
+    return `<div class="p-top"><a class="p-exit" href="${back}">✕ Close</a><span class="p-count">Nearly done</span></div>
+      <p class="eyebrow">${esc(b.title)} is ticked off</p><h1 tabindex="-1">${Q.h}</h1><div class="choice-stack">` +
+      Q.o.map(([v, t, cls]) => `<button type="button" class="big-choice ${cls}" data-action="p-answer" data-field="${q}" data-val="${v}"><strong>${t}</strong></button>`).join("") + `</div>`;
+  }
+  // finished
+  let h = `<h1 tabindex="-1">Well done!</h1><div class="p-done-icon" aria-hidden="true">${ICON.tick}</div>`;
+  h += isFuture ? `<p class="center">That was a preview. You can tick it off on the day.</p>` : `<p class="center"><strong>${esc(b.title)}</strong> is ticked off.</p>`;
+  if (qs.length && r.effort === "hard") h += `<div class="notice n-amber"><p>Thanks for saying. Next time, do fewer. If it's still too hard, you can repeat this week's level.</p></div>`;
+  if (qs.length && r.dizzy === "lot") h += `<div class="notice n-red"><p><strong>Rest for the rest of today.</strong> If this happens on more than one day, please tell your GP.</p></div>`;
+  const next = !isFuture && key === todayKey() ? nextUp(c.day, data.days[key] || {}, key) : null;
+  if (next && next.id === "standing") {
+    h += `<p class="center">Next: <strong>${esc(next.title)}</strong>. Only if you feel well, with someone nearby.</p><a class="btn btn-big" href="#/go/${key}/standing">Start ${esc(next.title.toLowerCase())}</a><a class="btn btn-secondary" href="${back}">Not today, back to today</a>`;
+  } else {
+    if (next) h += `<p class="center">Next: <strong>${esc(next.title)}</strong>, ${esc(next.short.charAt(0).toLowerCase() + next.short.slice(1))}.</p>`;
+    h += `<a class="btn btn-big" href="${back}">${key === todayKey() ? "Back to today" : "Back"}</a>`;
+  }
+  return h;
+}
+
+function viewCalendar() {
+  return `<h1 tabindex="-1">Calendar</h1><p class="muted">Tap a day to see its plan.</p>` + calendarHTML();
+}
+
+function calendarHTML() {
+  const m = state.month, y = m.getFullYear(), mo = m.getMonth();
+  const first = new Date(y, mo, 1), lead = (first.getDay() + 6) % 7, dim = new Date(y, mo + 1, 0).getDate();
+  const t = todayKey(), now = new Date();
+  const prev = new Date(y, mo - 1, 1), next = new Date(y, mo + 1, 1);
+  const mName = d => d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+  let h = `<section class="card" aria-labelledby="cal-h"><div class="cal-head">
+    <button type="button" class="cal-nav" id="cal-prev" data-action="cal-prev" aria-label="Previous month, ${esc(mName(prev))}">‹</button>
+    <h2 id="cal-h">${esc(mName(first))}</h2>
+    <button type="button" class="cal-nav" id="cal-next" data-action="cal-next" aria-label="Next month, ${esc(mName(next))}">›</button></div>`;
+  if (!(y === now.getFullYear() && mo === now.getMonth())) h += `<button type="button" class="btn btn-secondary" id="cal-today" data-action="cal-today">Back to this month</button>`;
+  h += `<div class="cal-week" aria-hidden="true">${["M", "T", "W", "T", "F", "S", "S"].map(d => `<span class="cal-dow">${d}</span>`).join("")}</div><div class="cal-week">`;
+  for (let i = 0; i < lead; i++) h += `<span class="cal-empty" aria-hidden="true"></span>`;
+  for (let d = 1; d <= dim; d++) {
+    const k = keyOf(new Date(y, mo, d)), day = buildDay(k), st = dayStatus(day), isT = k === t;
+    let cls = "cal-day", mk = "", label;
+    if (day.before) { cls += " before"; label = "Before the plan starts"; }
+    else {
+      label = day.typeLabel;
+      if (st === "done") { cls += " done"; mk = ICON.tick; label += ", all done"; }
+      else if (st === "partial") { cls += " partial"; mk = ICON.half; label += ", some done"; }
+      else if (st === "rested") { cls += " rest"; mk = ICON.moon; label += ", rested as not feeling well"; }
+      else if (st === "rest") { cls += " rest"; mk = ICON.moon; }
+      else if (day.type === "A" || day.type === "B") { cls += " strength"; mk = ICON.dot; }
+    }
+    if (isT) cls += " today";
+    h += `<button type="button" class="${cls}" data-action="open-day" data-date="${k}" aria-label="${esc(`${fmtLong(k)}${isT ? ", today" : ""}. ${label}.`)}"${isT ? ' aria-current="date"' : ""}><span class="num">${d}</span><span class="mk" aria-hidden="true">${mk}</span></button>`;
+  }
+  h += `</div><ul class="legend" aria-label="Key">
+    <li><span class="lg lg-done">${ICON.tick}</span>All done</li>
+    <li><span class="lg lg-partial">${ICON.half}</span>Some done</li>
+    <li><span class="lg lg-strength">${ICON.dot}</span>Strength day</li>
+    <li><span class="lg lg-rest">${ICON.moon}</span>Rest day</li>
+    <li><span class="lg lg-today"></span>Today</li></ul></section>`;
+  return h;
+}
+function timerText(s) { return s % 60 === 0 ? `${s / 60}-minute` : `${s}-second`; }
+function weekNote(day) {
+  if (day.pos.repeat) return "Repeat week: the same level as last week, as you chose. That's sensible, not a step back.";
+  if (day.pos.week > 12) return "You've finished the 12-week plan. Brilliant. Keep repeating these sessions, and it's a good time for a review with your GP or physio.";
+  return WEEK_NOTES[day.pos.week] || "";
+}
+
+function viewSafety() {
+  return `<h1 tabindex="-1">Safety</h1>
+  ${speakBtn("el:safety-text", "Read this page aloud")}
+  <div id="safety-text">
+  <section class="notice n-red"><h2>Call 999 if you have</h2><ul class="big-list call-999">
+    <li>Chest pain, pressure or tightness, or pain spreading to your arm, jaw or back.</li>
+    <li>Severe breathlessness, especially at rest, or coughing up pink, frothy phlegm.</li>
+    <li>Signs of a stroke: face drooping, arm weakness, slurred or muddled speech, sudden double vision or sudden severe headache.</li>
+    <li>A faint where you don't come round quickly, or a fall where you hit your head and then feel drowsy or sick.</li>
+    <li>New numbness around your bottom or private parts, or new trouble controlling your bladder or bowels. Go to A&amp;E or call 999.</li></ul></section>
+  <section class="notice n-amber"><h2>Contact your heart failure nurse or GP today if you have</h2><ul class="big-list">
+    <li>Put on 2 kg or more in 2 to 3 days, or the amount your heart failure team gave you.</li>
+    <li>More breathlessness when active or at rest.</li>
+    <li>More swelling in your ankles, legs or tummy.</li>
+    <li>Needed extra pillows to breathe, or woken up breathless at night.</li>
+    <li>A new or worse cough, or feel much more tired than usual.</li></ul>
+    <p><strong>Don't exercise until you've spoken to them.</strong></p></section>
+  <section class="card"><h2>Stop and sit or lie down if you feel</h2><ul class="big-list">
+    <li>Dizzy, light-headed, or as if the room is spinning.</li>
+    <li>Your vision going grey, blurry or dim.</li>
+    <li>Sick, clammy or unusually sweaty.</li>
+    <li>Your heart racing or fluttering.</li>
+    <li>Too short of breath to say a short sentence.</li>
+    <li>Back or leg pain getting worse, or tingling or numbness in your legs that doesn't settle when you sit and lean forward.</li>
+    <li>Shaky, sweaty, confused or suddenly very hungry. This could be low blood sugar, so treat it as you've been shown.</li></ul>
+    <p>If it passes within a few minutes, leave the rest for today or try again gently later. If it doesn't pass, call NHS 111, or 999 if it is severe.</p>
+    <p><strong>Feeling light-headed when standing?</strong> Cross your legs and squeeze your thighs and bottom, then sit down as soon as you can.</p></section>
+  <section class="card"><h2>Golden rules</h2><ol class="big-list">
+    <li><strong>Stand up in stages.</strong> Sit for a minute, pump your ankles, stand holding something firm, and count to 10 before you walk.</li>
+    <li><strong>Keep your head still and facing forward.</strong> Move your eyes, not your head. Turn your whole body to look around.</li>
+    <li><strong>Never hold your breath.</strong> Count out loud during every hold.</li>
+    <li><strong>Gentle effort.</strong> You should always be able to talk in full sentences. If you can't, slow down.</li>
+    <li><strong>Stick to your daily fluid allowance.</strong> If your heart failure team agrees, have a drink before you exercise.</li>
+    <li><strong>Not straight after a big meal, in a hot room or after a hot bath.</strong> Pedalling after meals is fine because you stay seated.</li>
+    <li><strong>Wear shoes</strong> or slippers with a back, and check your feet every day.</li>
+    <li><strong>Have your phone with you</strong>, and someone nearby for anything standing.</li>
+    <li><strong>Prop this phone up at eye level</strong> so you aren't looking down at it, or use "Read aloud".</li>
+    <li><strong>Tomorrow should feel the same or better.</strong> If you feel more tired, stiff or dizzy the next day, have a lighter day.</li></ol></section>
+  <section class="card"><h2>Things to avoid</h2><ul class="big-list">
+    <li>Looking up, reaching to high shelves or tipping your head back.</li>
+    <li>Neck stretches, head circles or quick head turns.</li>
+    <li>Lying on the floor. Use your bed, because getting up off the floor is too risky.</li>
+    <li>Lying on your front or arching your back.</li>
+    <li>Bending right down to the floor. Use a grabber.</li>
+    <li>Heavy lifting, straining, long or hard holds, or lifting anything above your head.</li>
+    <li>Standing still for a long time.</li></ul></section>
+  </div>`;
+}
+
+function viewMore() {
+  const items = [
+    ["#/start", "Before you start", "Set-up checklist and how the 12 weeks work"],
+    ["#/guide", "Exercise guide", "Every exercise, step by step"],
+    ["#/progress", "My progress", "What you've done, and a log to share"],
+    ["#/family", "For family, GP and physio", "How the plan is built, and questions to ask"],
+    ["#/help", "Keep this on your phone", "Add it to your home screen"],
+    ["#/settings", "Settings", "Text size, reading speed, start date, backup"]
+  ];
+  return `<h1 tabindex="-1">More</h1><ul class="menu">${items.map(([href, t, d]) => `<li><a href="${href}"><span>${esc(t)}<span class="desc">${esc(d)}</span></span><span class="chev" aria-hidden="true">›</span></a></li>`).join("")}</ul>`;
+}
+
+function viewStart() {
+  const s = data.settings.start;
+  const checks = [
+    ["gp", "My GP or heart failure nurse has checked this plan"],
+    ["scales", "Bathroom scales, if my heart team wants me to weigh myself daily"],
+    ["chair", "A firm chair with arms, its back against a wall, not on a rug"],
+    ["pedal", "Pedaller on a non-slip mat, set to the lowest resistance"],
+    ["cushion", "A cushion or small pillow for squeezes"],
+    ["water", "A drink within reach (within my fluid allowance)"],
+    ["shoes", "Shoes or slippers with a back"],
+    ["phone", "Somewhere to prop this phone at eye level"],
+    ["band", "A light resistance band and two tins (needed from week 3)"],
+    ["sugar", "If I take insulin or gliclazide: a sugary snack nearby"],
+    ["someone", "Someone around for the standing exercises (from week 7)"]
+  ];
+  const wk = [0, 1, 2, 3, 4, 5, 6].map(i => {
+    const nm = fmt(addDays(s, i), { weekday: "long" });
+    const ty = DAY_PATTERN[i];
+    const what = ty === "A" || ty === "B" ? "Strength day: wake-up routine, seated strength, pedals" : ty === "E" ? "Easy day: wake-up routine, back ease, pedals" : "Rest day: wake-up routine only";
+    return `<li><strong>${esc(nm)}</strong>${esc(what)}</li>`;
+  }).join("");
+  return `<h1 tabindex="-1">Before you start</h1>
+  <div class="notice n-info"><p>Please get your GP or heart failure nurse to check this plan before you start, especially the standing exercises that begin in week 7.</p></div>
+  <section class="card"><h2>How to use it each day</h2><ol class="big-list">
+    <li>Open the plan. It always opens on today.</li>
+    <li>Tap <strong>Start my check</strong> and answer the questions.</li>
+    <li>Tap <strong>Start</strong> under <strong>Next up</strong>. You'll see one exercise at a time. Tap <strong>Next</strong> when you've done it.</li>
+    <li>That's it. Each activity ticks itself off when you finish.</li></ol>
+    <p class="muted">Prefer to listen? Turn on <strong>Read each step aloud</strong> during an exercise.</p></section>
+  <section class="card"><h2>Set-up checklist</h2>${checks.map(([id, t]) => `<label class="check"><input type="checkbox" data-setup="${id}"${data.setup[id] ? " checked" : ""}><span>${esc(t)}</span></label>`).join("")}</section>
+  <section class="card"><h2>How the 12 weeks work</h2><ul class="phase-list">
+    <li><strong>Weeks 1 and 2: Settling in</strong>Short, gentle sessions to build the habit.</li>
+    <li><strong>Weeks 3 to 5: Building up</strong>A light band, light weights and the chair hover are added.</li>
+    <li><strong>Week 6: Easier week</strong>Fewer repetitions so your body can recover.</li>
+    <li><strong>Weeks 7 to 11: Getting stronger</strong>More repetitions, plus standing practice and short walks on good days.</li>
+    <li><strong>Week 12: Review week</strong>A little easier. Share your progress with your GP or physio.</li>
+    <li><strong>After that: Keep it going</strong>Keep repeating the week 11 sessions.</li></ul>
+    <p>If a week feels too hard, you can repeat it. Look for "Repeat this level next week".</p></section>
+  <section class="card"><h2>Your week</h2><ul class="phase-list">${wk}</ul>
+    <p><strong>Little and often</strong> works best for your blood pressure and blood sugar. Short sessions spread through the day are better than one long one.</p></section>
+  <section class="card"><h2>How hard should it feel?</h2><p>Think of a scale from 0 (sitting still) to 10 (the hardest you could ever work).</p><ul class="scale-list">
+    <li><span class="scale-num scale-go">2 to 3</span><span><strong>Aim here.</strong> Very light to light. You can talk in full sentences.</span></li>
+    <li><span class="scale-num">4</span><span>Getting harder. Ease off.</span></li>
+    <li><span class="scale-num scale-stop">5+</span><span>Too hard. Stop and rest.</span></li></ul>
+    <p class="muted">Go by how it feels, not your heart rate. Heart tablets such as beta-blockers can keep your heart rate low even when you're working hard.</p></section>
+  <a class="btn" href="#/day/${s}">See the first day</a>`;
+}
+
+function viewGuide() {
+  const groups = [["bed", "In bed"], ["chair", "In a chair"], ["stand", "Standing, holding on"], ["walk", "Walking"]];
+  let h = `<h1 tabindex="-1">Exercise guide</h1><p>Every exercise in the plan. Tap a name to see how to do it.</p>`;
+  for (const [g, title] of groups) {
+    h += `<section class="card"><h2>${esc(title)}</h2><ul class="ex-list">`;
+    for (const [id, e] of Object.entries(EX)) {
+      if (e.where !== g) continue;
+      h += `<li class="ex"><details id="g-${id}"><summary>${esc(e.name)}</summary>` +
+        (e.from ? `<p><span class="tag tag-opt">${esc(e.from)}</span>${e.goodDay ? '<span class="tag tag-good">Good days only</span>' : ""}</p>` : "") +
+        (e.also ? `<p class="muted">${esc(e.also)}</p>` : "") +
+        `<ol class="steps">${e.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>${e.tip ? `<p class="tip"><strong>Tip:</strong> ${esc(e.tip)}</p>` : ""}${speakBtn("ex:" + id)}</details></li>`;
+    }
+    h += `</ul></section>`;
+  }
+  return h;
+}
+
+function hasAny(r) {
+  if (!r) return false;
+  const bp = r.bp || {};
+  return Object.values(r.b || {}).some(Boolean) || r.feel || r.effort || r.dizzy || r.note || r.weight || bp.sitS || bp.stS;
+}
+function entryParts(k, r) {
+  const day = buildDay(k);
+  const done = day.blocks.filter(b => r.b && r.b[b.id]).map(b => b.title);
+  const bp = r.bp || {};
+  const parts = [];
+  parts.push(done.length ? "Done: " + done.join(", ") : "Nothing ticked");
+  if (r.feel) parts.push("Feeling: " + FEEL[r.feel]);
+  if (r.effort) parts.push("Effort: " + EFFORT[r.effort]);
+  if (r.dizzy) parts.push("Dizziness: " + DIZZY[r.dizzy]);
+  if (r.weight) parts.push("Weight " + r.weight + " kg");
+  if (bp.sitS || bp.sitD) parts.push(`BP sitting ${bp.sitS || "?"}/${bp.sitD || "?"}`);
+  if (bp.stS || bp.stD) parts.push(`BP standing ${bp.stS || "?"}/${bp.stD || "?"}`);
+  if (r.note) parts.push("Note: " + r.note);
+  return parts;
+}
+function logText() {
+  const lines = ["Exercise log", `Plan started ${fmt(data.settings.start, { weekday: "short", day: "numeric", month: "short", year: "numeric" })}`, ""];
+  let n = 0;
+  for (let i = 0; i < 42; i++) {
+    const k = addDays(todayKey(), -i), r = data.days[k];
+    if (!hasAny(r)) continue;
+    n++;
+    lines.push(`${fmtShort(k)}: ${entryParts(k, r).join(". ")}.`);
+  }
+  if (!n) lines.push("Nothing recorded yet.");
+  return lines.join("\n");
+}
+
+function viewProgress() {
+  const t = todayKey(), pos = position(t);
+  let h = `<h1 tabindex="-1">My progress</h1>`;
+  h += alertsHTML();
+  if (!pos) {
+    h += `<div class="notice n-info"><p>Your plan starts on <strong>${esc(fmtLong(data.settings.start))}</strong>. Your progress will show here.</p></div>`;
+  } else {
+    const ws = addDays(data.settings.start, pos.calWeek * 7);
+    let active = 0, done = 0;
+    for (let i = 0; i <= pos.dayIdx; i++) {
+      const day = buildDay(addDays(ws, i));
+      if (day.type === "R") continue;
+      active++;
+      if (dayStatus(day) === "done") done++;
+    }
+    const s7 = recentStats(t, 7);
+    let dz = 0; for (let i = 0; i < 7; i++) { const r = data.days[addDays(t, -i)]; if (r && (r.dizzy === "little" || r.dizzy === "lot")) dz++; }
+    h += `<section class="card"><h2>This week</h2><p>Week ${pos.week} of 12 · ${esc(PHASES[phaseKey(pos.week)].name)}</p>
+      <p><strong>${done}</strong> of ${active} exercise ${active === 1 ? "day" : "days"} so far fully done.</p>
+      <p>Days with dizziness in the last 7 days: <strong>${dz}</strong>.</p>
+      <p class="muted">Rest days and lighter days count too. Steady beats heroic.</p>${repeatControl(pos.calWeek)}</section>`;
+    // last 4 weeks table
+    const from = Math.max(0, pos.calWeek - 3);
+    const heads = [0, 1, 2, 3, 4, 5, 6].map(i => fmt(addDays(data.settings.start, i), { weekday: "short" }));
+    h += `<section class="card"><h2>Last 4 weeks</h2><table class="wk-table"><caption class="sr-only">Each row is one week of the plan. Each column is a day.</caption><thead><tr><td></td>${heads.map(x => `<th scope="col">${esc(x)}</th>`).join("")}</tr></thead><tbody>`;
+    for (let c = pos.calWeek; c >= from; c--) {
+      const ws2 = addDays(data.settings.start, c * 7), wkNo = c + 1 - data.holds.filter(x => x <= c).length;
+      h += `<tr><th scope="row">Wk ${wkNo}</th>`;
+      for (let i = 0; i < 7; i++) {
+        const k = addDays(ws2, i);
+        if (k > t) { h += `<td><span aria-hidden="true">·</span><span class="sr-only">Not yet</span></td>`; continue; }
+        const st = dayStatus(buildDay(k));
+        const map = { done: ["mk-done", ICON.tick, "All done"], partial: ["mk-partial", ICON.half, "Some done"], rest: ["mk-rest", ICON.moon, "Rest day"], rested: ["mk-rest", ICON.moon, "Rested, not feeling well"], todo: ["", "", "Not done"] };
+        const [cls, ic, lab] = map[st] || ["", "", ""];
+        h += `<td>${ic ? `<span class="mk ${cls}" aria-hidden="true">${ic}</span>` : '<span aria-hidden="true">–</span>'}<span class="sr-only">${esc(fmtShort(k))}: ${esc(lab)}</span></td>`;
+      }
+      h += `</tr>`;
+    }
+    h += `</tbody></table></section>`;
+  }
+  // log
+  h += `<section class="card"><h2>Diary</h2>`;
+  let n = 0;
+  for (let i = 0; i < 42; i++) {
+    const k = addDays(t, -i), r = data.days[k];
+    if (!hasAny(r)) continue;
+    n++;
+    h += `<div class="log-entry"><h3><a href="#/day/${k}">${esc(fmtLong(k))}</a></h3><p>${entryParts(k, r).map(esc).join("<br>")}</p></div>`;
+  }
+  if (!n) h += `<p>Nothing recorded yet. When you tick things off, they'll appear here.</p>`;
+  h += `<button type="button" class="btn" data-action="share-log">Share this log with GP or family</button><textarea id="log-text" rows="8" readonly hidden aria-label="Exercise log text"></textarea></section>`;
+  return h;
+}
+
+function viewFamily() {
+  return `<h1 tabindex="-1">For family, GP and physio</h1>
+  <div class="notice n-info"><p>This plan was put together for a 76-year-old man with managed heart failure, orthostatic hypotension, lumbar spinal stenosis, neck-triggered (cervicogenic) dizziness and type 2 diabetes. It is a starting point to review with his GP or physiotherapist, not a replacement for their advice.</p></div>
+  <section class="card"><h2>How the plan is built</h2><ul class="big-list">
+    <li><strong>Low intensity for heart failure.</strong> Target effort is 2 to 3 out of 10 using the talk test, not heart rate (beta-blockers blunt it). Warm-ups and cool-downs are longer, pedalling builds slowly to a maximum of 12 minutes twice a day and can be split into 2-minute intervals, and arm work is kept light. Isometric holds are capped at 3 seconds at about a third of effort, with moving exercises in between, to avoid blood pressure surges.</li>
+    <li><strong>Heart failure monitoring.</strong> The daily check lists heart failure warning signs, and there's an optional morning weight with an alert for a quick gain (default 2 kg in 3 days, adjustable in Settings to match his team's advice).</li>
+    <li><strong>Lying and seated first.</strong> He is symptom-free lying down, so the plan starts there. Supported standing is only added from week 7, on good days, with someone nearby.</li>
+    <li><strong>No neck movement.</strong> Every exercise keeps the head still and neutral. No looking up, no overhead lifting, no neck stretches. A pillow under the head when lying.</li>
+    <li><strong>Back-friendly.</strong> Seated work, pedalling and knee-to-chest positions open up the lower spine and tend to ease stenosis symptoms. No back-arching or lying on the front.</li>
+    <li><strong>Blood pressure safety built in.</strong> Leg pumping before standing, staged rising, counting aloud to prevent breath-holding, short gentle holds and a 2-minute seated rest after sessions. Leg-crossing and muscle-tensing manoeuvres are taught for symptoms on standing.</li>
+    <li><strong>Diabetes.</strong> Short seated pedals 15 to 30 minutes after meals to blunt blood sugar rises, while staying seated during the after-meal blood pressure dip.</li>
+    <li><strong>Little and often, with fatigue checks.</strong> A daily traffic-light check-in, an effort rating, one full rest day a week, easier weeks (6 and 12), and a "repeat this level" option.</li></ul></section>
+  <section class="card"><h2>Worth asking the GP</h2><ol class="big-list">
+    <li><strong>Cardiac rehabilitation for heart failure.</strong> NICE recommends offering a personalised, exercise-based programme, and home-based options exist. It's the safest way to progress beyond this plan.</li>
+    <li><strong>A referral to a physiotherapist with dizziness (vestibular) experience.</strong> Cervicogenic dizziness is usually treated with hands-on neck treatment and specific exercises, which this plan deliberately does not attempt.</li>
+    <li><strong>Has BPPV been ruled out?</strong> (The Dix–Hallpike test.) Positional vertigo in older people is often BPPV, which can usually be treated quickly with a repositioning manoeuvre.</li>
+    <li><strong>A medication review.</strong> Some medicines, such as blood pressure tablets, water tablets, prostate tablets like tamsulosin and some antidepressants, can make orthostatic hypotension worse. It's also worth asking about the best time of day to exercise in relation to his doses.</li>
+    <li><strong>Balancing heart failure with low blood pressure on standing.</strong> Extra fluid and salt, often advised for orthostatic hypotension, may not be appropriate with heart failure. Ask about his fluid allowance, whether compression stockings or an abdominal binder are suitable, and whether to raise the head of his bed.</li>
+    <li><strong>His weight-gain threshold and target weight</strong>, so the weight alert in this plan can be set to match (Settings).</li>
+    <li><strong>Diabetes medicines.</strong> Whether any of them (for example insulin or gliclazide) could cause low blood sugar with exercise.</li>
+    <li><strong>A lying and standing blood pressure check</strong>, and whether a rollator would help. Leaning forward on one often eases stenosis symptoms when walking.</li></ol></section>
+  <section class="card"><h2>What the log shows</h2><p>The <a href="#/progress">My progress</a> page records each day: what was ticked off, how he felt, how hard it was, any dizziness, and optional blood pressure readings and notes. Use "Share this log" to send it on.</p></section>
+  <section class="card"><h2>Signs the plan needs to change</h2><ul class="big-list">
+    <li>Dizziness becoming more frequent or more severe.</li>
+    <li>Heart failure symptoms getting worse: more breathlessness, swelling or quick weight gain.</li>
+    <li>Any fall or near-fall.</li>
+    <li>New leg weakness or numbness, or bladder or bowel changes (urgent).</li>
+    <li>"Too hard" on several days running, or feeling more tired the day after sessions.</li></ul></section>`;
+}
+
+function viewHelp() {
+  let h = `<h1 tabindex="-1">Keep this on your phone</h1>`;
+  if (isStandalone()) {
+    h += `<div class="notice n-info"><p><strong>You're all set.</strong> The plan is on your home screen and works without the internet.</p></div>`;
+  } else {
+    if (installEvt) h += `<button type="button" class="btn btn-big" data-action="install">Add to my home screen</button>`;
+    h += `<p>Put the plan on your home screen and it opens like an app. After the first time, it works without the internet.</p>
+    <section class="card"><h2>In Chrome</h2><ol class="big-list">
+      <li>Open the plan's link in <strong>Chrome</strong>.</li>
+      <li>Tap the <strong>three dots</strong> at the top right.</li>
+      <li>Tap <strong>Add to Home screen</strong>, then <strong>Install</strong>.</li></ol></section>
+    <section class="card"><h2>In Samsung Internet</h2><ol class="big-list">
+      <li>Open the plan's link in <strong>Samsung Internet</strong>.</li>
+      <li>Tap the <strong>three lines</strong> at the bottom right.</li>
+      <li>Tap <strong>Add page to</strong>, then <strong>Home screen</strong>.</li></ol></section>`;
+  }
+  h += `<section class="card"><h2>Your ticks and notes</h2>
+    <p>${storageOK ? "They're saved on this phone." : "<strong>They can't be saved at the moment.</strong> Open the plan in Chrome or Samsung Internet."}</p>
+    <p>They stay on this phone only. Clearing the browser's data, or uninstalling the app, would remove them, so make a backup in <a href="#/settings">Settings</a> first.</p></section>`;
+  return h;
+}
+
+function viewSettings() {
+  const sc = data.settings.scale, rate = data.settings.rate;
+  return `<h1 tabindex="-1">Settings</h1>
+  <section class="card"><div class="choice-group" role="group" aria-labelledby="sc-l"><h2 id="sc-l">Text size</h2><div class="choices">
+    ${SCALE_NAMES.map((n, i) => `<button type="button" class="choice" id="scale-${i}" aria-pressed="${sc === i}" data-action="scale" data-val="${i}">${sc === i ? ICON.tick : ""}<span>${n}</span></button>`).join("")}
+  </div></div></section>
+  <section class="card"><h2>Guided sessions</h2>
+    ${canSpeak ? `<button type="button" class="choice toggle-row" id="set-autoRead" data-action="toggle-setting" data-key="autoRead" aria-pressed="${!!data.settings.autoRead}">${data.settings.autoRead ? ICON.tick : ""}<span>Read each step aloud automatically</span></button>` : ""}
+    <button type="button" class="choice toggle-row" id="set-askWeight" data-action="toggle-setting" data-key="askWeight" aria-pressed="${data.settings.askWeight !== false}">${data.settings.askWeight !== false ? ICON.tick : ""}<span>Ask for my weight in the morning check</span></button></section>
+  ${canSpeak ? `<section class="card"><div class="choice-group" role="group" aria-labelledby="rate-l"><h2 id="rate-l">Reading-aloud speed</h2><div class="choices">
+    <button type="button" class="choice" id="rate-normal" aria-pressed="${rate === "normal"}" data-action="rate" data-val="normal">${rate === "normal" ? ICON.tick : ""}<span>Normal</span></button>
+    <button type="button" class="choice" id="rate-slow" aria-pressed="${rate === "slow"}" data-action="rate" data-val="slow">${rate === "slow" ? ICON.tick : ""}<span>Slower</span></button>
+  </div></div>${speakBtn("text:This is how fast the plan will read to you.", "Try it")}</section>` : ""}
+  <section class="card"><div class="choice-group" role="group" aria-labelledby="wa-l"><h2 id="wa-l">Weight alert</h2><p>Warn me if my weight goes up by this much in 3 days. Use the amount your heart failure team gave you.</p><div class="choices">
+    ${[1.5, 2, 2.5, 3].map(v => { const on = Number(data.settings.wAlert || 2) === v; return `<button type="button" class="choice" id="wa-${String(v).replace(".", "-")}" aria-pressed="${on}" data-action="walert" data-val="${v}">${on ? ICON.tick : ""}<span>${v} kg</span></button>`; }).join("")}
+  </div></div></section>
+  <section class="card"><h2>Plan start date</h2><p>Change this only if you're starting later. Your ticks are kept.</p>
+    <div class="field"><label for="start-in">Start date</label><input type="date" id="start-in" value="${esc(data.settings.start)}"></div>
+    <button type="button" class="btn" data-action="save-start">Save start date</button></section>
+  <section class="card"><h2>Saving</h2><p>${storageOK ? "Your ticks and notes are saved on this phone." : "<strong>Your ticks can't be saved when the plan is opened this way.</strong> See Keep this on your phone."}</p>
+    <h3>Backup</h3><p>Copy a backup code and keep it somewhere safe, such as an email to yourself. You can paste it back in later, or on a new phone.</p>
+    <button type="button" class="btn btn-secondary" data-action="backup-copy">Copy backup code</button>
+    <textarea id="backup-out" rows="3" readonly hidden aria-label="Backup code"></textarea>
+    <div class="field"><label for="backup-in">Restore from a backup code</label><textarea id="backup-in" rows="3"></textarea></div>
+    <button type="button" class="btn btn-secondary" data-action="backup-restore">Restore</button></section>
+  <section class="card"><h2>Start again</h2><p>This deletes every tick, note and setting on this phone.</p><button type="button" class="btn btn-danger" data-action="clear-all">Delete everything</button></section>`;
+}
+
+/* ================= Router ================= */
+const main = document.getElementById("main");
+const navLinks = Array.from(document.querySelectorAll(".bottomnav a"));
+let currentPath = "/";
+const cleanPath = h => (String(h || "").replace(/^#/, "") || "/");
+function go(path, replace) {
+  currentPath = cleanPath(path);
+  try { history[replace ? "replaceState" : "pushState"]({ p: currentPath }, "", "#" + currentPath); } catch (e) { /* preview frames may not allow this */ }
+  closeTimer(); stopSpeak(); render(true);
+}
+function route() {
+  const parts = currentPath.split("/").filter(Boolean);
+  return { page: parts[0] || "home", arg: parts[1], arg2: parts[2] };
+}
+function render(moveFocus) {
+  const { page, arg, arg2 } = route();
+  let html, title = "My Exercise Plan", nav = page;
+  // reset step counters when entering the guided screens fresh
+  const pFor = page === "go" ? arg + "/" + arg2 : null;
+  if (pFor !== state.pFor) { state.pstep = 0; state.pFor = pFor; }
+  const cFor = page === "check" ? todayKey() : null;
+  if (cFor !== state.cFor) { state.cstep = 0; state.cFor = cFor; }
+  switch (page) {
+    case "day": {
+      const k = isKey(arg) ? arg : todayKey();
+      state.dayKey = k; html = viewDay(k); title = fmtLong(k) + " – My Exercise Plan"; nav = k === todayKey() ? "today" : "calendar"; break;
+    }
+    case "go": {
+      state.dayKey = isKey(arg) ? arg : todayKey(); html = viewPlayer(); title = "Exercise – My Exercise Plan"; nav = ""; break;
+    }
+    case "check": state.dayKey = todayKey(); html = viewCheck(); title = "Morning check – My Exercise Plan"; nav = ""; break;
+    case "calendar": html = viewCalendar(); title = "Calendar – My Exercise Plan"; break;
+    case "safety": html = viewSafety(); title = "Safety – My Exercise Plan"; break;
+    case "more": html = viewMore(); break;
+    case "start": html = viewStart(); title = "Before you start – My Exercise Plan"; nav = "more"; break;
+    case "guide": html = viewGuide(); title = "Exercise guide – My Exercise Plan"; nav = "more"; break;
+    case "progress": html = viewProgress(); title = "My progress – My Exercise Plan"; nav = "more"; break;
+    case "family": html = viewFamily(); title = "For family, GP and physio – My Exercise Plan"; nav = "more"; break;
+    case "help": html = viewHelp(); title = "Keep this on your phone – My Exercise Plan"; nav = "more"; break;
+    case "settings": html = viewSettings(); title = "Settings – My Exercise Plan"; nav = "more"; break;
+    default: state.dayKey = todayKey(); html = viewDay(todayKey()); nav = "today";
+  }
+  document.body.classList.toggle("focus-mode", page === "go" || page === "check");
+  main.innerHTML = html;
+  document.title = title;
+  navLinks.forEach(a => a.dataset.nav === nav ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  updateSpeakButtons();
+  if (moveFocus) {
+    window.scrollTo(0, 0);
+    const h1 = main.querySelector("h1");
+    try { (h1 || main).focus({ preventScroll: true }); } catch (e) { (h1 || main).focus(); }
+  }
+  if (state.autoSpeak) {
+    state.autoSpeak = false;
+    const c = page === "go" ? playerCtx() : null;
+    if (c && data.settings.autoRead && state.pstep >= 1 && state.pstep <= c.total) speakChunks(stepSpeech(c.items[state.pstep - 1]), "step");
+  }
+}
+function rerender(focusId) {
+  const y = window.scrollY;
+  const open = Array.from(main.querySelectorAll("details[open]")).map(d => d.id).filter(Boolean);
+  render(false);
+  open.forEach(id => { const d = document.getElementById(id); if (d) d.open = true; });
+  window.scrollTo(0, y);
+  if (focusId) { const el = document.getElementById(focusId); if (el) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } } }
+}
+
+/* ================= Toast ================= */
+const toastEl = document.getElementById("toast");
+let toastT;
+function toast(msg) { clearTimeout(toastT); toastEl.textContent = ""; setTimeout(() => { toastEl.textContent = msg; }, 30); toastT = setTimeout(() => { toastEl.textContent = ""; }, 3200); }
+
+/* ================= Text size ================= */
+function applyScale() {
+  const s = Math.max(0, Math.min(2, Number(data.settings.scale) || 0));
+  data.settings.scale = s;
+  document.documentElement.setAttribute("data-scale", String(s));
+  document.getElementById("ts-down").disabled = s === 0;
+  document.getElementById("ts-up").disabled = s === 2;
+}
+
+/* ================= Read aloud ================= */
+let speakingId = null;
+function pickVoice() {
+  try {
+    const vs = speechSynthesis.getVoices() || [];
+    const norm = v => (v.lang || "").replace("_", "-").toLowerCase();
+    return vs.find(v => norm(v) === "en-gb" && v.localService) || vs.find(v => norm(v) === "en-gb") || vs.find(v => norm(v).startsWith("en")) || null;
+  } catch (e) { return null; }
+}
+function speakChunks(chunks, id) {
+  if (!canSpeak) return;
+  try { speechSynthesis.cancel(); } catch (e) {}
+  speakingId = id || null; updateSpeakButtons();
+  const v = pickVoice(), rate = data.settings.rate === "slow" ? 0.75 : 0.92;
+  const list = chunks.map(s => String(s).replace(/[–—]/g, ",").trim()).filter(Boolean);
+  list.forEach((txt, i) => {
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = "en-GB"; u.rate = rate; if (v) u.voice = v;
+    if (i === list.length - 1) u.onend = u.onerror = () => { if (speakingId === id) { speakingId = null; updateSpeakButtons(); } };
+    speechSynthesis.speak(u);
+  });
+}
+function stopSpeak() { if (!canSpeak) return; try { speechSynthesis.cancel(); } catch (e) {} speakingId = null; updateSpeakButtons(); }
+function updateSpeakButtons() {
+  document.querySelectorAll('[data-action="speak"]').forEach(b => {
+    const on = !!speakingId && b.dataset.speakId === speakingId;
+    b.setAttribute("aria-pressed", String(on));
+    const l = b.querySelector(".lbl");
+    if (!b.dataset.label) b.dataset.label = l.textContent;
+    l.textContent = on ? "Stop reading" : b.dataset.label;
+  });
+}
+function exSpeech(id, dose) {
+  const e = EX[id]; const out = [e.name + "."];
+  if (dose) out.push(dose + ".");
+  out.push(...e.steps);
+  if (e.tip) out.push("Tip. " + e.tip);
+  return out;
+}
+function speechFor(sid) {
+  const [kind, ...rest] = sid.split(":"); const ref = rest.join(":");
+  if (kind === "block") {
+    const b = buildDay(state.dayKey).blocks.find(x => x.id === ref); if (!b) return [];
+    const out = [b.title + (b.sub ? ", " + b.sub : "") + ".", "When: " + b.when + ".", "How long: " + b.mins + "."];
+    if (b.note) out.push(b.note);
+    b.sections.forEach(s => { if (s.title) out.push(s.title + "."); s.items.forEach(it => out.push(...exSpeech(it.ex, it.dose))); });
+    return out;
+  }
+  if (kind === "ex") return exSpeech(ref);
+  if (kind === "el") { const el = document.getElementById(ref); return el ? el.innerText.split(/\n+/) : []; }
+  if (kind === "text") return [ref];
+  return [];
+}
+
+/* ================= Timer ================= */
+const ov = document.getElementById("timer");
+const tDisp = document.getElementById("timer-display");
+const tLive = document.getElementById("timer-live");
+const tPause = document.getElementById("timer-pause");
+const tClose = document.getElementById("timer-close");
+const tm = { end: 0, remain: 0, running: false, int: null, ctx: null, lastAnn: null, wake: null, opener: null };
+const mmss = ms => { const s = Math.ceil(ms / 1000); return `${Math.floor(s / 60)}:${pad(s % 60)}`; };
+async function requestWake() { try { if ("wakeLock" in navigator) tm.wake = await navigator.wakeLock.request("screen"); } catch (e) {} }
+function releaseWake() { try { if (tm.wake) tm.wake.release(); } catch (e) {} tm.wake = null; }
+function openTimer(secs, label, opener) {
+  stopSpeak();
+  tm.opener = opener; tm.remain = secs * 1000; tm.lastAnn = null;
+  document.getElementById("timer-title").textContent = label;
+  try { const C = window.AudioContext || window.webkitAudioContext; if (C && !tm.ctx) tm.ctx = new C(); if (tm.ctx && tm.ctx.state === "suspended") tm.ctx.resume(); } catch (e) {}
+  ov.hidden = false; tPause.hidden = false; tClose.textContent = "Stop";
+  startTimer();
+  tLive.textContent = `Timer started: ${Math.round(secs / 60) >= 1 && secs % 60 === 0 ? secs / 60 + " minutes" : secs + " seconds"}.`;
+  tPause.focus();
+}
+function startTimer() {
+  tm.end = Date.now() + tm.remain; tm.running = true;
+  clearInterval(tm.int); tm.int = setInterval(tick, 250);
+  tPause.textContent = "Pause"; requestWake(); tick();
+}
+function pauseTimer() { tm.remain = Math.max(0, tm.end - Date.now()); tm.running = false; clearInterval(tm.int); tPause.textContent = "Carry on"; tLive.textContent = "Paused."; releaseWake(); }
+function tick() {
+  const left = Math.max(0, tm.end - Date.now()); tm.remain = left; tDisp.textContent = mmss(left);
+  const s = Math.ceil(left / 1000);
+  if (s > 0 && s % 60 === 0 && s !== tm.lastAnn) { tm.lastAnn = s; tLive.textContent = `${s / 60} minute${s === 60 ? "" : "s"} left.`; }
+  if (left <= 0) finishTimer();
+}
+function beep() {
+  try {
+    const ctx = tm.ctx; if (!ctx) return;
+    [0, 0.4, 0.8].forEach(t => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = 880;
+      o.connect(g); g.connect(ctx.destination);
+      const at = ctx.currentTime + t;
+      g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(0.5, at + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.3);
+      o.start(at); o.stop(at + 0.32);
+    });
+  } catch (e) {}
+}
+function finishTimer() {
+  clearInterval(tm.int); tm.running = false; tDisp.textContent = "Done!"; tPause.hidden = true; tClose.textContent = "Close";
+  tLive.textContent = "Time's up. Well done."; beep();
+  try { if (navigator.vibrate) navigator.vibrate([400, 200, 400]); } catch (e) {}
+  if (canSpeak) speakChunks(["Time's up. Well done."], "timer");
+  releaseWake(); tClose.focus();
+}
+function closeTimer() {
+  if (ov.hidden) return;
+  clearInterval(tm.int); tm.running = false; ov.hidden = true; releaseWake();
+  if (tm.opener && document.body.contains(tm.opener)) tm.opener.focus();
+}
+ov.addEventListener("keydown", e => {
+  if (e.key === "Escape") { e.preventDefault(); closeTimer(); return; }
+  if (e.key === "Tab") {
+    const f = [tPause, tClose].filter(b => !b.hidden);
+    const i = f.indexOf(document.activeElement);
+    e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+  }
+});
+
+/* ================= Backup ================= */
+function encodeBackup() { return "EXPLAN1:" + btoa(unescape(encodeURIComponent(JSON.stringify(data)))); }
+function decodeBackup(code) {
+  const c = code.trim().replace(/^EXPLAN1:/, "").replace(/\s+/g, "");
+  const obj = JSON.parse(decodeURIComponent(escape(atob(c))));
+  if (!obj || typeof obj !== "object" || typeof obj.days !== "object") throw new Error("bad");
+  return merge(obj);
+}
+async function copyText(text) { try { await navigator.clipboard.writeText(text); return true; } catch (e) { return false; } }
+
+/* ================= Events ================= */
+document.addEventListener("click", async e => {
+  const link = e.target.closest('a[href^="#"]');
+  if (link) {
+    e.preventDefault();
+    const href = link.getAttribute("href");
+    if (href === "#main") { try { main.focus(); } catch (err) {} return; }
+    go(href); return;
+  }
+  const el = e.target.closest("[data-action]"); if (!el) return;
+  const a = el.dataset.action;
+  switch (a) {
+    case "open-day": go(el.dataset.date === todayKey() ? "/" : "/day/" + el.dataset.date); break;
+    case "p-next": case "p-back": {
+      const c = playerCtx(); if (!c) break;
+      if (a === "p-next") {
+        if (state.pstep === c.total && !c.isFuture) { const r = rec(c.key); r.b = r.b || {}; r.b[c.b.id] = true; save(); }
+        state.pstep = Math.min(c.final, state.pstep + 1);
+      } else state.pstep = Math.max(0, state.pstep - 1);
+      stopSpeak(); state.autoSpeak = true; render(true);
+      break;
+    }
+    case "p-answer": {
+      const c = playerCtx(); if (!c) break;
+      const r = rec(c.key); r[el.dataset.field] = el.dataset.val; save();
+      state.pstep = Math.min(c.final, state.pstep + 1); render(true);
+      break;
+    }
+    case "p-quickdone": case "p-untick": {
+      const c = playerCtx(); if (!c) break;
+      const r = rec(c.key); r.b = r.b || {};
+      if (a === "p-quickdone") { r.b[c.b.id] = true; save(); toast("Ticked off. Well done!"); go(c.back); }
+      else { delete r.b[c.b.id]; save(); toast("Tick removed"); rerender(); }
+      break;
+    }
+    case "p-read": {
+      data.settings.autoRead = !data.settings.autoRead; save();
+      el.setAttribute("aria-pressed", String(data.settings.autoRead));
+      const c = playerCtx();
+      if (data.settings.autoRead && c && state.pstep >= 1 && state.pstep <= c.total) speakChunks(stepSpeech(c.items[state.pstep - 1]), "step"); else stopSpeak();
+      toast(data.settings.autoRead ? "Steps will be read aloud" : "Reading aloud is off");
+      break;
+    }
+    case "chk-hf": {
+      const r = rec(todayKey()); r.hf = el.dataset.val;
+      if (r.hf === "yes") { r.feel = "unwell"; r.checked = true; state.cstep = 3; } else state.cstep = 1;
+      save(); render(true); break;
+    }
+    case "chk-feel": {
+      const r = rec(todayKey()); r.feel = el.dataset.val;
+      if (data.settings.askWeight !== false) state.cstep = 2; else { r.checked = true; state.cstep = 3; }
+      save(); render(true); break;
+    }
+    case "chk-wsave": case "chk-wskip": {
+      const r = rec(todayKey());
+      if (a === "chk-wsave") {
+        const v = (document.getElementById("chk-weight").value || "").replace(",", ".").replace(/[^0-9.]/g, "").slice(0, 5);
+        if (!numW(v)) { toast("Please type your weight in kg, or tap Skip"); break; }
+        r.weight = v;
+      }
+      r.checked = true; state.cstep = 3; save(); render(true); break;
+    }
+    case "toggle-setting": {
+      const k = el.dataset.key, cur = k === "askWeight" ? data.settings[k] !== false : !!data.settings[k]; data.settings[k] = !cur;
+      save(); rerender(el.id); break;
+    }
+    case "toggle-block": {
+      const k = state.dayKey, r = rec(k), id = el.dataset.block;
+      r.b = r.b || {};
+      if (r.b[id]) delete r.b[id]; else r.b[id] = true;
+      save();
+      const now = !!r.b[id];
+      const allDone = dayStatus(buildDay(k)) === "done";
+      rerender(el.id);
+      toast(now ? (allDone ? (k === todayKey() ? "All done for today. Well done!" : "All done for that day. Well done!") : "Ticked off. Well done!") : "Tick removed");
+      break;
+    }
+    case "set": {
+      const r = rec(state.dayKey), f = el.dataset.field, v = el.dataset.val;
+      if (r[f] === v) delete r[f]; else r[f] = v;
+      save(); rerender(el.id);
+      break;
+    }
+    case "repeat-week": {
+      const cw = Number(el.dataset.cw);
+      if (!data.holds.includes(cw)) { data.holds.push(cw); data.holds.sort((x, y) => x - y); }
+      save(); rerender("undo-repeat"); toast("Next week will repeat this week's level");
+      break;
+    }
+    case "undo-repeat": {
+      const cw = Number(el.dataset.cw);
+      data.holds = data.holds.filter(x => x !== cw);
+      save(); rerender("repeat-week"); toast("Back to the normal plan");
+      break;
+    }
+    case "cal-prev": case "cal-next": {
+      const m = state.month; state.month = new Date(m.getFullYear(), m.getMonth() + (a === "cal-prev" ? -1 : 1), 1);
+      rerender(a); break;
+    }
+    case "cal-today": { const d = new Date(); state.month = new Date(d.getFullYear(), d.getMonth(), 1); rerender("cal-next"); break; }
+    case "ts-down": case "ts-up": {
+      data.settings.scale = (Number(data.settings.scale) || 0) + (a === "ts-up" ? 1 : -1);
+      applyScale(); save(); toast("Text size: " + SCALE_NAMES[data.settings.scale]);
+      if (route().page === "settings") rerender();
+      break;
+    }
+    case "scale": data.settings.scale = Number(el.dataset.val); applyScale(); save(); rerender(el.id); toast("Text size: " + SCALE_NAMES[data.settings.scale]); break;
+    case "rate": data.settings.rate = el.dataset.val; save(); rerender(el.id); break;
+    case "walert": data.settings.wAlert = Number(el.dataset.val); save(); rerender(el.id); toast("Weight alert: " + el.dataset.val + " kg in 3 days"); break;
+    case "speak": {
+      const sid = el.dataset.speakId;
+      if (speakingId === sid) stopSpeak(); else speakChunks(speechFor(sid), sid);
+      break;
+    }
+    case "timer": openTimer(Number(el.dataset.secs), el.dataset.label, el); break;
+    case "timer-pause": if (tm.running) pauseTimer(); else startTimer(); break;
+    case "timer-close": closeTimer(); break;
+    case "save-start": {
+      const v = document.getElementById("start-in").value;
+      if (!isKey(v)) { toast("Please choose a date"); break; }
+      data.settings.start = v; data.holds = []; save(); rerender(); toast("Start date saved: " + fmtLong(v));
+      break;
+    }
+    case "share-log": {
+      const text = logText();
+      if (navigator.share) { try { await navigator.share({ title: "Exercise log", text }); break; } catch (err) { if (err && err.name === "AbortError") break; } }
+      if (await copyText(text)) { toast("Log copied. Paste it into a message or email."); break; }
+      const ta = document.getElementById("log-text"); if (ta) { ta.hidden = false; ta.value = text; ta.focus(); ta.select(); toast("Select the text below and copy it."); }
+      break;
+    }
+    case "backup-copy": {
+      const code = encodeBackup(), out = document.getElementById("backup-out");
+      out.hidden = false; out.value = code;
+      if (await copyText(code)) toast("Backup code copied"); else { out.focus(); out.select(); toast("Select the code and copy it"); }
+      break;
+    }
+    case "backup-restore": {
+      const v = document.getElementById("backup-in").value;
+      try { data = decodeBackup(v); save(); applyScale(); rerender(); toast("Backup restored"); }
+      catch (err) { toast("That code didn't work. Please check it and try again."); }
+      break;
+    }
+    case "clear-all": {
+      if (window.confirm("This deletes every tick, note and setting on this phone. Are you sure?")) {
+        data = blank(); save(); applyScale(); render(true); toast("Everything deleted");
+      }
+      break;
+    }
+  }
+});
+
+function setRecField(path, value) {
+  const r = rec(state.dayKey);
+  if (path === "note" || path === "weight") { if (value) r[path] = value; else delete r[path]; }
+  else if (path.startsWith("bp.")) { r.bp = r.bp || {}; const f = path.slice(3); if (value) r.bp[f] = value; else delete r.bp[f]; }
+  save();
+}
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.dataset && el.dataset.rec) {
+    let v = el.value;
+    if (el.dataset.rec.startsWith("bp.")) { v = v.replace(/\D/g, "").slice(0, 3); if (v !== el.value) el.value = v; }
+    if (el.dataset.rec === "weight") { v = v.replace(",", ".").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1").slice(0, 5); if (v !== el.value) el.value = v; }
+    setRecField(el.dataset.rec, v.trim());
+  }
+});
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset && el.dataset.rec) { toast("Saved"); if (el.dataset.rec === "weight") rerender(el.id); }
+  if (el.dataset && el.dataset.setup) { data.setup[el.dataset.setup] = el.checked; save(); }
+});
+
+window.addEventListener("popstate", e => {
+  currentPath = cleanPath((e.state && e.state.p) || location.hash);
+  closeTimer(); stopSpeak(); render(true);
+});
+window.addEventListener("hashchange", () => {
+  const h = cleanPath(location.hash);
+  if (h !== currentPath) { currentPath = h; closeTimer(); stopSpeak(); render(true); }
+});
+
+let lastToday = todayKey();
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  const t = todayKey();
+  if (t !== lastToday) {
+    lastToday = t;
+    const d = new Date(); state.month = new Date(d.getFullYear(), d.getMonth(), 1);
+    if (route().page === "home") render(false);
+  }
+});
+
+/* ================= Start ================= */
+if (canSpeak) { try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; } catch (e) {} }
+applyScale();
+// Always open on the home screen, showing today and this month.
+currentPath = "/";
+try { history.replaceState({ p: "/" }, "", "#/"); } catch (e) {}
+/* ================= Install as an app ================= */
+let installEvt = null;
+function isStandalone() {
+  try { return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true; } catch (e) { return false; }
+}
+function installCardHTML() {
+  if (!installEvt || isStandalone() || data.settings.installDismissed) return "";
+  return `<section class="card install-card" aria-labelledby="inst-h"><h2 id="inst-h">Put this plan on your home screen</h2>
+    <p>It will open like an app, and work without the internet.</p>
+    <button type="button" class="btn btn-big" data-action="install">Add to my home screen</button>
+    <button type="button" class="btn btn-secondary" data-action="install-later">Not now</button></section>`;
+}
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); installEvt = e;
+  const pg = route().page; if (pg === "home" || pg === "help") rerender();
+});
+window.addEventListener("appinstalled", () => { installEvt = null; toast("Added to your home screen"); rerender(); });
+document.addEventListener("click", async e => {
+  const el = e.target.closest('[data-action="install"], [data-action="install-later"]'); if (!el) return;
+  if (el.dataset.action === "install-later") { data.settings.installDismissed = true; save(); rerender(); return; }
+  if (!installEvt) { go("/help"); return; }
+  try { installEvt.prompt(); const choice = await installEvt.userChoice; if (choice && choice.outcome === "accepted") installEvt = null; } catch (err) {}
+  rerender();
+});
+if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
+}
+
+try { render(false); } catch (err) { showFatal(err && err.message); }
+})();
+</script>
+</body>
+</html>
