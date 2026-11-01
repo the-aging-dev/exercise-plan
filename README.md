@@ -24,9 +24,9 @@ Note: Pages on a free account needs a **public** repo. The page has `noindex` se
 
 **Netlify Drop / Cloudflare Pages**: drag this folder onto the upload page.
 
-## Getting it onto Dad's phone
+## Getting it onto your phone
 
-1. Open the link in Chrome on his phone.
+1. Open the link in Chrome on your phone.
 2. Tap **Add to my home screen** on the Today page (or ⋮ → *Add to Home screen* → *Install*).
 3. Open it once from the home screen while online. After that it works offline.
 
